@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bhavya's Fridge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      background: #F5F0E8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Courier Prime', monospace;
+    }
+
+    .page {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .fridge {
+      position: relative;
+      width: 255px;
+      height: 480px;
+      perspective: 1200px;
+    }
+
+    /* Main fridge body */
+    .fridge-body {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg,
+        #5a7a52 0%,
+        #7B9E6B 20%,
+        #8aad78 50%,
+        #7B9E6B 80%,
+        #4a6a42 100%);
+      border-radius: 16px;
+      box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.4),
+        inset 0 40px 60px rgba(255, 255, 255, 0.06);
+      overflow: hidden;
+      perspective: 1200px;
+    }
+
+    /* Top face - 3D depth */
+    .fridge-top-face {
+      position: absolute;
+      top: -8px;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 12px;
+      background: #5a7a52;
+      border-radius: 16px 16px 0 0;
+      z-index: 10;
+      clip-path: inset(0 0 0 0);
+    }
+
+    /* Right side face - 3D depth */
+    .fridge-side-face {
+      position: absolute;
+      right: -10px;
+      top: 0;
+      width: 10px;
+      height: 480px;
+      background: #5a7a52;
+      border-radius: 0 16px 16px 0;
+      box-shadow: -2px 0 6px rgba(0, 0, 0, 0.2);
+      z-index: 5;
+    }
+
+    /* Freezer section - top 25% */
+    .freezer-section {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 25%;
+      background: linear-gradient(90deg,
+        #52725a 0%,
+        #6B8E73 50%,
+        #52725a 100%);
+      border-radius: 12px 12px 0 0;
+      z-index: 2;
+    }
+
+    /* Divider line between freezer and main door */
+    .divider-line {
+      position: absolute;
+      top: 25%;
+      left: 4px;
+      right: 4px;
+      height: 4px;
+      background: #3a5032;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+      z-index: 3;
+    }
+
+    /* Main fridge door section */
+    .main-door {
+      position: absolute;
+      top: 25%;
+      left: 0;
+      width: 100%;
+      height: 75%;
+      z-index: 2;
+    }
+
+    /* Door gasket - inset border inside main door */
+    .door-gasket {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      right: 8px;
+      bottom: 60px;
+      border: 3px solid #3a5032;
+      border-radius: 8px;
+      background: none;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .main-door.is-open .door-gasket {
+      display: none;
+    }
+
+    .door-gasket::before {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      right: 2px;
+      bottom: 2px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    /* Freezer handle - shorter, on freezer section */
+    .handle-freezer {
+      position: absolute;
+      right: 12px;
+      top: 18px;
+      width: 14px;
+      height: 55px;
+      background: linear-gradient(90deg,
+        #8a7355 0%,
+        #b8a090 15%,
+        #d4c4b0 30%,
+        #e8d4b8 45%,
+        #d4c4b0 60%,
+        #b8a090 80%,
+        #8a7355 100%);
+      border-radius: 7px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+      z-index: 4;
+    }
+
+    .handle-freezer::after {
+      content: '';
+      position: absolute;
+      left: 2px;
+      top: 2px;
+      width: 4px;
+      height: 51px;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 2px;
+      z-index: 5;
+    }
+
+    /* Main door handle - tall, on main door section */
+    .handle-main {
+      position: absolute;
+      right: 12px;
+      top: 60px;
+      width: 14px;
+      height: 140px;
+      background: linear-gradient(90deg,
+        #8a7355 0%,
+        #b8a090 12%,
+        #c8b8a8 18%,
+        #d4c4b0 28%,
+        #e8d4b8 40%,
+        #f0e0c8 50%,
+        #e8d4b8 60%,
+        #d4c4b0 72%,
+        #c8b8a8 82%,
+        #b8a090 88%,
+        #8a7355 100%);
+      border-radius: 7px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5);
+      z-index: 4;
+    }
+
+    .handle-main::after {
+      content: '';
+      position: absolute;
+      left: 2px;
+      top: 2px;
+      width: 4px;
+      height: 136px;
+      background: rgba(255, 255, 255, 0.42);
+      border-radius: 2px;
+      z-index: 5;
+    }
+
+    .handle-main:hover,
+    .handle-freezer:hover {
+      filter: brightness(1.15);
+    }
+
+    .main-door.is-open .handle-main {
+      display: none;
+    }
+
+    /* Main door rotation */
+    .main-door {
+      transform-style: preserve-3d;
+      transform-origin: right center;
+      transition: transform 0.65s ease-in-out;
+      cursor: pointer;
+    }
+
+    .main-door.is-open {
+      transform: rotateY(-125deg);
+    }
+
+    /* Door interior */
+    .door-interior {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse 80% 100% at 50% 0%, rgba(255,255,255,0.3) 0%, transparent 60%),
+                  linear-gradient(180deg, #D6EEF0 0%, #d0e8ea 100%);
+      z-index: 2;
+      display: none;
+      flex-direction: column;
+      padding: 20px 12px;
+      gap: 25px;
+      pointer-events: none;
+    }
+
+    .main-door.is-open .door-interior {
+      display: flex;
+    }
+
+    .shelf-row {
+      position: relative;
+      height: 60px;
+      border-top: 6px solid rgba(255, 255, 255, 0.4);
+      padding-top: 8px;
+    }
+
+    .shelf-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 10px;
+      color: #5a7a52;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      opacity: 0.7;
+    }
+
+    .shelf-items {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .shelf-item {
+      width: 28px;
+      height: 20px;
+      background: linear-gradient(135deg, #8aad78 0%, #7B9E6B 100%);
+      border-radius: 2px;
+      opacity: 0.6;
+    }
+
+    .drawer-section {
+      position: absolute;
+      bottom: 8px;
+      left: 12px;
+      right: 12px;
+      height: 50px;
+      border-top: 6px solid rgba(255, 255, 255, 0.4);
+      padding-top: 8px;
+    }
+
+    .drawer-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 10px;
+      color: #5a7a52;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    /* Nameplate at bottom */
+    .nameplate {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(58, 80, 50, 0.7);
+      padding: 6px 16px;
+      border-radius: 4px;
+      font-family: 'Playfair Display', serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #F5F5DC;
+      letter-spacing: 1px;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+      z-index: 3;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+    }
+
+    /* Vent grille at very bottom */
+    .vent-grille {
+      position: absolute;
+      bottom: 4px;
+      left: 12px;
+      right: 12px;
+      height: 6px;
+      background: repeating-linear-gradient(
+        90deg,
+        #3a5032 0px,
+        #3a5032 18px,
+        #2a4022 18px,
+        #2a4022 20px
+      );
+      border-radius: 2px;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+      z-index: 3;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="fridge">
+      <div class="fridge-top-face"></div>
+      <div class="fridge-side-face"></div>
+      <div class="fridge-body">
+        <div class="freezer-section"></div>
+        <div class="divider-line"></div>
+        <div class="handle-freezer"></div>
+        <div class="main-door">
+          <div class="door-gasket"></div>
+          <div class="door-interior">
+            <div class="shelf-row">
+              <div class="shelf-label">Experience</div>
+              <div class="shelf-items">
+                <div class="shelf-item"></div>
+                <div class="shelf-item"></div>
+                <div class="shelf-item"></div>
+              </div>
+            </div>
+            <div class="shelf-row">
+              <div class="shelf-label">Projects</div>
+              <div class="shelf-items">
+                <div class="shelf-item"></div>
+                <div class="shelf-item"></div>
+              </div>
+            </div>
+            <div class="shelf-row">
+              <div class="shelf-label">Skills</div>
+              <div class="shelf-items">
+                <div class="shelf-item"></div>
+                <div class="shelf-item"></div>
+                <div class="shelf-item"></div>
+                <div class="shelf-item"></div>
+              </div>
+            </div>
+            <div class="drawer-section">
+              <div class="drawer-label">About</div>
+            </div>
+          </div>
+          <div class="handle-main"></div>
+        </div>
+        <div class="nameplate">Bhavya</div>
+        <div class="vent-grille"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.querySelector('.main-door').addEventListener('click', function() {
+      this.classList.toggle('is-open');
+    });
+  </script>
+</body>
+</html>

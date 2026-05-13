@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bhavya's Portfolio — The Kitchen</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="kitchen-scene">
+    <!-- Wall background -->
+    <div class="wall"></div>
+
+    <!-- Upper cabinets -->
+    <div class="upper-cabinets">
+      <div class="cabinet-door cabinet-1">
+        <div class="cabinet-door-handle"></div>
+        <div class="cabinet-interior">
+          <h3>Reading List</h3>
+          <ul>
+            <li>The Pragmatic Programmer</li>
+            <li>A Philosophy of Software Design</li>
+            <li>Designing Data-Intensive Applications</li>
+          </ul>
+        </div>
+      </div>
+      <div class="cabinet-door cabinet-2">
+        <div class="cabinet-door-handle"></div>
+        <div class="cabinet-interior">
+          <h3>Fun Facts</h3>
+          <ul>
+            <li>Built my first API freshman year</li>
+            <li>Love a good optimization problem</li>
+            <li>Terrible at cooking (ironic for a portfolio kitchen)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="cabinet-door cabinet-3">
+        <div class="cabinet-door-handle"></div>
+        <div class="cabinet-interior">
+          <h3>What I'm Learning</h3>
+          <ul>
+            <li>Distributed systems theory</li>
+            <li>Fine-grained authorization patterns</li>
+            <li>High-performance Go</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main appliances row -->
+    <div class="appliances-row">
+      <!-- Fridge -->
+      <div class="fridge-container">
+        <div class="fridge" id="fridge">
+          <div class="fridge-door">
+            <div class="fridge-nameplate">Bhavya</div>
+            <div class="fridge-handle">
+              <div class="handle-top"></div>
+              <div class="handle-highlight"></div>
+            </div>
+          </div>
+          <div class="fridge-interior" id="fridge-interior">
+            <!-- Top shelf: Experience -->
+            <div class="fridge-shelf" data-shelf="experience">
+              <div class="shelf-label">Experience</div>
+              <div class="shelf-items">
+                <div class="tupperware" data-item="experience-1">SWE Intern</div>
+                <div class="tupperware" data-item="experience-2">Open Source</div>
+                <div class="tupperware" data-item="experience-3">Side Projects</div>
+              </div>
+            </div>
+
+            <!-- Middle shelf: Projects -->
+            <div class="fridge-shelf" data-shelf="projects">
+              <div class="shelf-label">Projects</div>
+              <div class="shelf-items">
+                <div class="leftover-container" data-item="project-1">TailorCV</div>
+                <div class="leftover-container" data-item="project-2">pipguard-cli</div>
+                <div class="leftover-container" data-item="project-3">Voice Canvas</div>
+              </div>
+            </div>
+
+            <!-- Crisper drawer: Skills -->
+            <div class="crisper-drawer" data-shelf="skills">
+              <div class="shelf-label">Skills</div>
+              <div class="shelf-items">
+                <div class="skill-chip" data-skill="python">Python</div>
+                <div class="skill-chip" data-skill="fastapi">FastAPI</div>
+                <div class="skill-chip" data-skill="postgres">PostgreSQL</div>
+                <div class="skill-chip" data-skill="nextjs">Next.js</div>
+                <div class="skill-chip" data-skill="docker">Docker</div>
+                <div class="skill-chip" data-skill="git">Git</div>
+              </div>
+            </div>
+
+            <!-- Door top shelf: About Me -->
+            <div class="door-shelf door-top">
+              <div class="sauce-bottle" data-item="about"></div>
+            </div>
+
+            <!-- Door bottom shelf: Contact -->
+            <div class="door-shelf door-bottom">
+              <div class="condiment-jar" data-item="contact-1"></div>
+              <div class="condiment-jar" data-item="contact-2"></div>
+            </div>
+
+            <!-- Back wall: Things That Didn't Make It -->
+            <div class="fridge-back">
+              <div class="shelf-label">Didn't Make The Cut</div>
+              <div class="shelf-items expired-items">
+                <div class="expired-item" data-item="expired-1">
+                  <span class="expiry">3mo ago</span>
+                  Hackathon Project
+                </div>
+                <div class="expired-item" data-item="expired-2">
+                  <span class="expiry">6mo ago</span>
+                  ML Model
+                </div>
+                <div class="expired-item" data-item="expired-3">
+                  <span class="expiry">1yr ago</span>
+                  App Idea
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cooktop/Stove -->
+      <div class="stove-container">
+        <div class="range-hood">
+          <div class="hood-interior"></div>
+        </div>
+        <div class="stove">
+          <div class="burner-ring" data-burner="0"></div>
+          <div class="burner-ring" data-burner="1"></div>
+          <div class="burner-ring" data-burner="2"></div>
+          <div class="burner-ring" data-burner="3"></div>
+          <div class="steam-wisp" style="--delay: 0s;"></div>
+          <div class="steam-wisp" style="--delay: 0.3s;"></div>
+          <div class="steam-wisp" style="--delay: 0.6s;"></div>
+          <div class="stove-face">
+            <div class="knob" id="cook-knob">
+              <div class="knob-line"></div>
+            </div>
+            <div class="knob-label">Cook Something</div>
+            <div class="pilot-light"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Corkboard -->
+      <div class="corkboard">
+        <div class="note note-1" style="transform: rotate(-2deg);">
+          <div class="pushpin"></div>
+          Available for co-op — May 2026
+        </div>
+        <div class="note note-2" style="transform: rotate(1.5deg);">
+          <div class="pushpin"></div>
+          <a href="https://github.com/bhavya" target="_blank">GitHub: github.com/bhavya</a>
+        </div>
+        <div class="note note-3" style="transform: rotate(-1deg);">
+          <div class="pushpin"></div>
+          <a href="https://linkedin.com/in/bhavya" target="_blank">LinkedIn: linkedin.com/in/bhavya</a>
+        </div>
+        <div class="note note-4" style="transform: rotate(2deg);">
+          <div class="pushpin"></div>
+          Email: b2goel@uwaterloo.ca
+        </div>
+        <div class="note clock-note" style="transform: rotate(-1.5deg);">
+          <div class="pushpin"></div>
+          <div class="analog-clock" id="clock">
+            <div class="clock-face">
+              <div class="clock-center"></div>
+              <div class="hour-hand"></div>
+              <div class="minute-hand"></div>
+              <div class="second-hand"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Counter surface -->
+    <div class="counter"></div>
+
+    <!-- Floor -->
+    <div class="floor"></div>
+
+    <!-- Builder panel (Cook flow Step 1) -->
+    <div class="builder-panel" id="builder-panel">
+      <div class="builder-header">🍳 Choose Your Dish</div>
+
+      <div class="builder-content">
+        <!-- Base selection -->
+        <div class="builder-section">
+          <h3>Base</h3>
+          <div class="card-group" id="base-group">
+            <label class="card-radio">
+              <input type="radio" name="base" value="swe">
+              <div class="card-label">Software Engineer</div>
+              <div class="card-desc">Backend, APIs, infra</div>
+            </label>
+            <label class="card-radio">
+              <input type="radio" name="base" value="ml">
+              <div class="card-label">ML / Data</div>
+              <div class="card-desc">Models, embeddings, search</div>
+            </label>
+            <label class="card-radio">
+              <input type="radio" name="base" value="devtools">
+              <div class="card-label">Dev Tools</div>
+              <div class="card-desc">CLIs, security, DX</div>
+            </label>
+            <label class="card-radio">
+              <input type="radio" name="base" value="product">
+              <div class="card-label">Product Builder</div>
+              <div class="card-desc">Shipped, user loops</div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Toppings selection -->
+        <div class="builder-section">
+          <h3>Special Ingredient</h3>
+          <div class="card-group" id="topping-group">
+            <label class="card-checkbox">
+              <input type="checkbox" name="topping" value="tailorcv">
+              <div class="card-label">TailorCV</div>
+              <div class="card-desc">Semantic search, FastAPI</div>
+            </label>
+            <label class="card-checkbox">
+              <input type="checkbox" name="topping" value="pipguard">
+              <div class="card-label">pipguard-cli</div>
+              <div class="card-desc">PyPI package, security</div>
+            </label>
+            <label class="card-checkbox">
+              <input type="checkbox" name="topping" value="voicecanvas">
+              <div class="card-label">Voice Canvas</div>
+              <div class="card-desc">Next.js, real-time AI</div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Style selection -->
+        <div class="builder-section">
+          <h3>Style</h3>
+          <div class="card-group" id="style-group">
+            <label class="card-radio">
+              <input type="radio" name="style" value="scrappy">
+              <div class="card-label">Scrappy</div>
+              <div class="card-desc">Gets it done</div>
+            </label>
+            <label class="card-radio">
+              <input type="radio" name="style" value="security">
+              <div class="card-label">Security</div>
+              <div class="card-desc">Risk-aware</div>
+            </label>
+            <label class="card-radio">
+              <input type="radio" name="style" value="research">
+              <div class="card-label">Research</div>
+              <div class="card-desc">Curious</div>
+            </label>
+            <label class="card-radio">
+              <input type="radio" name="style" value="ships">
+              <div class="card-label">Ships Fast</div>
+              <div class="card-desc">Iterate quick</div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <button class="cook-button" id="cook-button" disabled>
+        <span class="button-text">🔥 Cook</span>
+      </button>
+    </div>
+
+    <!-- Recipe card (Step 4) -->
+    <div class="recipe-card" id="recipe-card">
+      <div class="recipe-content">
+        <div class="recipe-emoji" id="recipe-emoji">🍲</div>
+        <h1 class="recipe-name" id="recipe-name">Rustic Backend Stew</h1>
+        <div class="recipe-divider"></div>
+        <p class="recipe-description" id="recipe-description">
+          The kind of engineer who will own the whole stack before lunch and have opinions about your indexing strategy by EOD.
+        </p>
+        <div class="recipe-meta">
+          <div class="meta-row">
+            <span class="meta-label">Pairs with:</span>
+            <span class="meta-value" id="recipe-pairs">Early-stage teams</span>
+          </div>
+          <div class="meta-row">
+            <span class="meta-label">Cook time:</span>
+            <span class="meta-value" id="recipe-time">1 sprint</span>
+          </div>
+        </div>
+        <div class="recipe-divider"></div>
+        <div class="recipe-buttons">
+          <button class="recipe-btn copy-btn" id="copy-btn">📋 Copy</button>
+          <button class="recipe-btn again-btn" id="again-btn">🔄 Cook Again</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detail drawer -->
+    <div class="detail-drawer" id="detail-drawer">
+      <button class="drawer-close" id="drawer-close">✕</button>
+      <div class="drawer-content" id="drawer-content">
+        <!-- Content injected by JS -->
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
