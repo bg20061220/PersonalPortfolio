@@ -3,143 +3,817 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bhavya's Portfolio — The Kitchen</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <title>Bhavya's Kitchen</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    body {
+      background: #F0EAE0;
+      font-family: 'Courier Prime', monospace;
+    }
+
+    .kitchen-scene {
+      width: 100vw;
+      height: 100vh;
+      display: grid;
+      grid-template-rows: 80px 1fr 70px 90px;
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+
+    /* ─── UPPER CABINETS ─── */
+    .upper-cabinets {
+      grid-row: 1;
+      grid-column: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      padding: 10px 30px;
+      background: #F0EAE0;
+    }
+
+    .cabinet-door {
+      background: linear-gradient(135deg, #8B6914 0%, #A0791D 50%, #7A5F10 100%);
+      border-radius: 4px;
+      border: 2px solid #5a4510;
+      cursor: pointer;
+      transition: transform 0.5s ease-in-out;
+      transform-style: preserve-3d;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      position: relative;
+    }
+
+    .cabinet-door:hover {
+      filter: brightness(1.05);
+    }
+
+    .cabinet-door.open {
+      transform: rotateX(-110deg);
+    }
+
+    .cabinet-door-handle {
+      position: absolute;
+      width: 30px;
+      height: 8px;
+      background: #daa520;
+      border-radius: 2px;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    }
+
+    .cabinet-interior {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #f9f6f0;
+      border-radius: 4px;
+      padding: 12px;
+      transform: rotateX(90deg);
+      transform-origin: top center;
+      font-size: 11px;
+      overflow: hidden;
+    }
+
+    .cabinet-interior h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 13px;
+      margin-bottom: 6px;
+      color: #C4572A;
+    }
+
+    .cabinet-interior ul {
+      list-style: none;
+      font-size: 10px;
+      line-height: 1.4;
+    }
+
+    /* ─── APPLIANCES ROW ─── */
+    .appliances-row {
+      grid-row: 2;
+      grid-column: 1;
+      display: grid;
+      grid-template-columns: 28% 40% 32%;
+      gap: 0;
+      padding: 0;
+      align-items: stretch;
+      background: #F0EAE0;
+    }
+
+    /* ─── FRIDGE ZONE ─── */
+    .fridge-zone {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      height: 100%;
+      padding: 0;
+    }
+
+    .fridge-wrap {
+      position: relative;
+      width: 280px;
+      height: 100%;
+    }
+
+    .fridge-body {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, #2e6868 0%, #488080 12%, #529090 50%, #488080 88%, #1e5858 100%);
+      border-radius: 10px;
+      box-shadow: 5px 8px 28px rgba(0,0,0,0.28);
+    }
+
+    .fridge-top-face {
+      position: absolute;
+      top: -7px; left: 4px; right: -8px; height: 8px;
+      background: #2a6060;
+      border-radius: 3px 3px 0 0;
+      transform: skewX(-45deg) scaleX(0.97);
+      transform-origin: bottom left;
+    }
+    .fridge-side-face {
+      position: absolute;
+      top: -3px; right: -9px; width: 10px; bottom: 8px;
+      background: #1a5050;
+      border-radius: 0 3px 3px 0;
+      transform: skewY(-45deg);
+      transform-origin: top left;
+    }
+
+    .freezer-section {
+      position: absolute;
+      top: 6px; left: 6px; right: 6px; height: 60px;
+      border-radius: 6px 6px 0 0;
+      overflow: hidden;
+    }
+    .freezer-interior {
+      position: absolute; inset: 0;
+      background: #b0d8d8;
+      border-radius: 6px 6px 0 0;
+      display: flex; align-items: center; justify-content: center;
+      gap: 5px; padding: 8px;
+    }
+    .sticky {
+      width: 40px; height: 40px;
+      border-radius: 2px; padding: 4px;
+      font-size: 6px; line-height: 1.2; color: #333;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.15);
+      flex-shrink: 0;
+    }
+
+    .freezer-divider {
+      position: absolute;
+      top: 63px; left: 6px; right: 6px; height: 3px;
+      background: #1a5050;
+    }
+
+    .freezer-door-wrap {
+      position: absolute;
+      top: 6px; left: 6px; right: 6px; height: 60px;
+      perspective: 800px;
+      perspective-origin: right center;
+    }
+    .freezer-door {
+      position: absolute; inset: 0;
+      transform-origin: right center;
+      transform: rotateY(0deg);
+      transition: transform 0.55s ease-in-out;
+      cursor: pointer;
+      transform-style: preserve-3d;
+    }
+    .freezer-door.open { transform: rotateY(-115deg); }
+    .freezer-door-face {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, #2a5858 0%, #3e7070 15%, #488080 50%, #3e7070 85%, #1a4848 100%);
+      border-radius: 6px 6px 0 0;
+      backface-visibility: visible;
+    }
+    .freezer-door-gasket {
+      position: absolute;
+      top: 6px; left: 6px; right: 6px; bottom: 6px;
+      border: 2px solid rgba(0,0,0,0.15);
+      border-radius: 4px;
+      pointer-events: none;
+    }
+    .freezer-handle {
+      position: absolute;
+      top: 50%; transform: translateY(-50%); left: 12px;
+      width: 9px; height: 30px; border-radius: 5px;
+      background: linear-gradient(to right, rgba(255,255,255,0.3), rgba(255,255,255,0.7), rgba(255,255,255,0.4));
+    }
+    .freezer-handle::after {
+      content: '';
+      position: absolute; top: 3px; left: 2px; width: 2px; height: 24px;
+      background: rgba(255,255,255,0.4); border-radius: 2px;
+    }
+
+    .fridge-interior {
+      position: absolute;
+      top: 66px; left: 6px; right: 6px; bottom: 6px;
+      background: linear-gradient(to bottom, #daf2f2 0%, #c8eaea 50%, #b8e0e0 100%);
+      border-radius: 0 0 6px 6px;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      padding: 4px 4px 4px;
+    }
+    .interior-light {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 80px; height: 15px; pointer-events: none;
+      background: radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, transparent 100%);
+    }
+
+    .shelf-zone {
+      flex: 1;
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 0 2px 0;
+    }
+    .shelf-zone:last-child .shelf-bar { display: none; }
+
+    .shelf-contents {
+      display: flex; align-items: flex-end; gap: 3px;
+      padding: 2px 1px 2px;
+    }
+
+    .container-main {
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      width: 38px;
+      border-radius: 3px 3px 2px 2px;
+      padding-bottom: 3px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: transform 0.15s ease;
+    }
+    .container-main:hover {
+      transform: translateY(-2px);
+    }
+
+    .container-main .lid {
+      width: 100%; height: 5px;
+      border-radius: 3px 3px 0 0;
+      background: rgba(255,255,255,0.5);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .container-main .body {
+      width: 100%; flex: 1;
+      border-radius: 0 0 2px 2px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5px;
+    }
+    .container-main .clabel {
+      font-size: 5px; font-weight: bold;
+      text-transform: uppercase; color: rgba(0,0,0,0.5);
+      text-align: center;
+    }
+
+    .container-sm {
+      border-radius: 2px 2px 1px 1px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      flex-shrink: 0; overflow: hidden;
+    }
+    .container-sm .lid {
+      height: 4px;
+      background: rgba(255,255,255,0.45);
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+    }
+
+    .shelf-bar {
+      height: 4px; border-radius: 2px;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.7) 0%, rgba(200,240,240,0.4) 100%);
+      border-top: 1px solid rgba(255,255,255,0.9);
+      border-bottom: 1px solid rgba(150,210,210,0.4);
+      margin: 0 -1px;
+    }
+
+    .fridge-door-wrap {
+      position: absolute;
+      top: 66px; left: 6px; right: 6px; bottom: 6px;
+      perspective: 1000px;
+      perspective-origin: right center;
+    }
+    .fridge-door {
+      position: absolute; inset: 0;
+      transform-origin: right center;
+      transform: rotateY(0deg);
+      transition: transform 0.65s ease-in-out;
+      cursor: pointer;
+      transform-style: preserve-3d;
+    }
+    .fridge-door.open { transform: rotateY(-125deg); }
+
+    .door-face {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, #2e6868 0%, #488080 12%, #529090 50%, #488080 88%, #2a6060 100%);
+      border-radius: 0 0 6px 6px;
+      backface-visibility: visible;
+    }
+    .door-gasket {
+      position: absolute;
+      top: 8px; left: 8px; right: 8px; bottom: 8px;
+      border: 2px solid rgba(0,0,0,0.15);
+      border-radius: 4px;
+      pointer-events: none;
+    }
+    .door-nameplate {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: rgba(20,60,60,0.7); padding: 3px 12px; border-radius: 2px;
+      color: #d0f0f0; font-family: 'Playfair Display', serif;
+      font-size: 11px; letter-spacing: 1px;
+      pointer-events: none;
+    }
+    .door-handle {
+      position: absolute; top: 50%; transform: translateY(-50%); left: 12px;
+      width: 8px; height: 50px; border-radius: 4px;
+      background: linear-gradient(to right, rgba(255,255,255,0.3), rgba(255,255,255,0.7), rgba(255,255,255,0.4));
+    }
+    .door-handle::after {
+      content: '';
+      position: absolute; top: 3px; left: 2px; width: 2px; height: 44px;
+      background: rgba(255,255,255,0.4); border-radius: 2px;
+    }
+    .door-back {
+      position: absolute; inset: 0;
+      background: #2a5858;
+      border-radius: 0 0 6px 6px;
+      transform: rotateY(180deg);
+      backface-visibility: visible;
+    }
+
+    .vent {
+      position: absolute; bottom: 8px; left: 12px; right: 12px; height: 5px;
+      background: #1a5050; border-radius: 1px;
+      display: flex; gap: 3px; align-items: center; padding: 0 4px; overflow: hidden;
+    }
+    .vent-slot { flex: 1; height: 2px; background: #0a4040; border-radius: 1px; }
+
+    /* ─── STOVE ZONE ─── */
+    .stove-zone {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100%;
+      padding: 0;
+    }
+
+    .stove-container {
+      width: 320px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .range-hood {
+      height: 50px;
+      background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
+      border-radius: 0;
+      border: 2px solid #1a1a1a;
+      border-bottom: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .hood-interior {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
+      border-radius: 6px 6px 0 0;
+      opacity: 0.7;
+    }
+
+    .stove {
+      flex: 1;
+      background: #2A2A2A;
+      border-radius: 0;
+      border: 2px solid #1a1a1a;
+      border-top: none;
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 20px;
+      padding: 25px 28px 70px 18px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      align-content: start;
+      justify-items: center;
+    }
+
+    .burner-ring {
+      width: 48px;
+      height: 48px;
+      border: 3px solid #444;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #555, #222);
+      box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.8);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .burner-ring.active {
+      border-color: #C4572A;
+      animation: burner-glow 1s infinite;
+    }
+
+    @keyframes burner-glow {
+      0%, 100% {
+        box-shadow:
+          inset 0 4px 8px rgba(0, 0, 0, 0.8),
+          0 0 15px rgba(196, 87, 42, 0.5);
+      }
+      50% {
+        box-shadow:
+          inset 0 4px 8px rgba(0, 0, 0, 0.8),
+          0 0 30px rgba(196, 87, 42, 0.8);
+      }
+    }
+
+    .steam-wisp {
+      position: absolute;
+      bottom: 45px;
+      left: 50%;
+      width: 16px;
+      height: 24px;
+      background: radial-gradient(ellipse at center, rgba(200, 200, 200, 0.6) 0%, transparent 70%);
+      border-radius: 50%;
+      transform: translateX(-50%);
+      animation: steam-float 2s ease-in infinite;
+      animation-delay: var(--delay);
+      pointer-events: none;
+    }
+
+    @keyframes steam-float {
+      0% {
+        transform: translateX(-50%) translateY(0) scale(1);
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateX(-50%) translateY(-60px) scale(0.7);
+        opacity: 0;
+      }
+    }
+
+    .stove-face {
+      position: absolute;
+      bottom: 15px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .knob {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(135deg, #444 0%, #222 100%);
+      border-radius: 50%;
+      border: 2px solid #111;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .knob:hover {
+      transform: rotate(15deg);
+    }
+
+    .knob-line {
+      width: 2px;
+      height: 10px;
+      background: #ccc;
+      position: absolute;
+      top: 3px;
+    }
+
+    .knob-label {
+      font-family: 'Playfair Display', serif;
+      font-size: 9px;
+      color: #F5F5DC;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+    .pilot-light {
+      width: 7px;
+      height: 7px;
+      background: rgba(196, 87, 42, 0.3);
+      border-radius: 50%;
+      border: 1px solid #C4572A;
+      box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ─── CORKBOARD ZONE ─── */
+    .corkboard-zone {
+      display: flex;
+      justify-content: stretch;
+      align-items: stretch;
+      height: 100%;
+      padding: 0;
+    }
+
+    .corkboard {
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle 1px at 10px 20px, #b8860b 1px, transparent 1px);
+      background-size: 20px 20px;
+      background-color: #C19A6B;
+      border-radius: 0;
+      border: none;
+      padding: 20px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      align-items: center;
+      justify-content: center;
+      box-shadow: none;
+      flex-wrap: wrap;
+    }
+
+    .note {
+      background: #FDF6E3;
+      padding: 10px 12px;
+      border-radius: 2px;
+      font-size: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      position: relative;
+      max-width: 120px;
+      text-align: center;
+      line-height: 1.3;
+      color: #333;
+    }
+
+    .note a {
+      color: #C4572A;
+      text-decoration: none;
+    }
+
+    .note a:hover {
+      text-decoration: underline;
+    }
+
+    .pushpin {
+      position: absolute;
+      top: -7px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 9px;
+      height: 9px;
+      background: radial-gradient(circle at 30% 30%, #ff6b6b, #cc0000);
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    .clock-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .analog-clock {
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .clock-face {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      border: 2px solid #333;
+      border-radius: 50%;
+      background: #F5F5DC;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .clock-center {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background: #333;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+    }
+
+    .hour-hand,
+    .minute-hand,
+    .second-hand {
+      position: absolute;
+      bottom: 50%;
+      left: 50%;
+      transform-origin: bottom center;
+      background: #333;
+    }
+
+    .hour-hand {
+      width: 3px;
+      height: 14px;
+      margin-left: -1.5px;
+    }
+
+    .minute-hand {
+      width: 2px;
+      height: 19px;
+      margin-left: -1px;
+    }
+
+    .second-hand {
+      width: 1px;
+      height: 21px;
+      background: #C4572A;
+      margin-left: -0.5px;
+    }
+
+    /* ─── COUNTER ─── */
+    .counter {
+      grid-row: 3;
+      grid-column: 1;
+      background: linear-gradient(180deg, #8B6914 0%, #8B6914 50%, #7a5f10 100%);
+      background-image:
+        linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent),
+        linear-gradient(#8B6914, #8B6914);
+      background-size: 40px 100%, 100% 100%;
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    /* ─── FLOOR ─── */
+    .floor {
+      grid-row: 4;
+      grid-column: 1;
+      background-image:
+        linear-gradient(45deg, #E8DDD0 25%, transparent 25%),
+        linear-gradient(-45deg, #E8DDD0 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #E8DDD0 75%),
+        linear-gradient(-45deg, transparent 75%, #E8DDD0 75%);
+      background-size: 60px 60px;
+      background-position: 0 0, 0 30px, 30px -30px, -30px 0;
+      background-color: #D4C9BC;
+    }
+  </style>
 </head>
 <body>
-  <div class="kitchen-scene">
-    <!-- Wall background -->
-    <div class="wall"></div>
 
-    <!-- Upper cabinets -->
-    <div class="upper-cabinets">
-      <div class="cabinet-door cabinet-1">
-        <div class="cabinet-door-handle"></div>
-        <div class="cabinet-interior">
-          <h3>Reading List</h3>
-          <ul>
-            <li>The Pragmatic Programmer</li>
-            <li>A Philosophy of Software Design</li>
-            <li>Designing Data-Intensive Applications</li>
-          </ul>
-        </div>
+<div class="kitchen-scene">
+
+  <!-- ─── ROW 1: UPPER CABINETS ─── -->
+  <div class="upper-cabinets">
+    <div class="cabinet-door">
+      <div class="cabinet-door-handle"></div>
+      <div class="cabinet-interior">
+        <h3>Reading</h3>
+        <ul>
+          <li>Pragmatic Programmer</li>
+          <li>Software Design</li>
+          <li>Data Intensive Apps</li>
+        </ul>
       </div>
-      <div class="cabinet-door cabinet-2">
-        <div class="cabinet-door-handle"></div>
-        <div class="cabinet-interior">
-          <h3>Fun Facts</h3>
-          <ul>
-            <li>Built my first API freshman year</li>
-            <li>Love a good optimization problem</li>
-            <li>Terrible at cooking (ironic for a portfolio kitchen)</li>
-          </ul>
-        </div>
+    </div>
+    <div class="cabinet-door">
+      <div class="cabinet-door-handle"></div>
+      <div class="cabinet-interior">
+        <h3>Fun Facts</h3>
+        <ul>
+          <li>First API freshman year</li>
+          <li>Love optimization</li>
+          <li>Terrible cook!</li>
+        </ul>
       </div>
-      <div class="cabinet-door cabinet-3">
-        <div class="cabinet-door-handle"></div>
-        <div class="cabinet-interior">
-          <h3>What I'm Learning</h3>
-          <ul>
-            <li>Distributed systems theory</li>
-            <li>Fine-grained authorization patterns</li>
-            <li>High-performance Go</li>
-          </ul>
+    </div>
+    <div class="cabinet-door">
+      <div class="cabinet-door-handle"></div>
+      <div class="cabinet-interior">
+        <h3>Learning</h3>
+        <ul>
+          <li>Distributed systems</li>
+          <li>Authorization patterns</li>
+          <li>High-perf Go</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── ROW 2: APPLIANCES ─── -->
+  <div class="appliances-row">
+    <!-- FRIDGE ZONE -->
+    <div class="fridge-zone">
+      <div class="fridge-wrap">
+        <div class="fridge-body"></div>
+        <div class="fridge-top-face"></div>
+        <div class="fridge-side-face"></div>
+
+        <div class="freezer-section">
+          <div class="freezer-interior">
+            <div class="sticky" style="background:#fff9c4; transform:rotate(-2deg);">🏅</div>
+            <div class="sticky" style="background:#c8e6c9; transform:rotate(2deg);">CS+Math</div>
+            <div class="sticky" style="background:#ffe0b2; transform:rotate(-1deg);">PyPI@19</div>
+          </div>
+        </div>
+        <div class="freezer-divider"></div>
+
+        <div class="freezer-door-wrap">
+          <div class="freezer-door" id="freezerDoor">
+            <div class="freezer-door-face">
+              <div class="freezer-door-gasket"></div>
+              <div class="freezer-handle"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fridge-interior">
+          <div class="interior-light"></div>
+          <div class="shelf-zone">
+            <div class="shelf-contents">
+              <div class="container-main" style="height:28px;" data-section="exp">
+                <div class="lid"></div>
+                <div class="body" style="background:rgba(100,180,160,0.55);"><span class="clabel">Exp</span></div>
+              </div>
+              <div class="container-sm" style="width:15px; height:22px;">
+                <div class="lid"></div>
+                <div class="body" style="height:17px; background:rgba(120,190,170,0.4);"></div>
+              </div>
+            </div>
+            <div class="shelf-bar"></div>
+          </div>
+          <div class="shelf-zone">
+            <div class="shelf-contents">
+              <div class="container-main" style="height:26px;" data-section="proj">
+                <div class="lid" style="background:rgba(200,120,100,0.4);"></div>
+                <div class="body" style="background:rgba(200,120,100,0.45);"><span class="clabel">Proj</span></div>
+              </div>
+              <div class="container-sm" style="width:13px; height:20px;">
+                <div class="lid" style="background:rgba(200,120,100,0.35);"></div>
+                <div class="body" style="height:16px; background:rgba(200,120,100,0.3);"></div>
+              </div>
+            </div>
+            <div class="shelf-bar"></div>
+          </div>
+          <div class="shelf-zone">
+            <div class="shelf-contents">
+              <div class="container-main" style="height:24px;" data-section="skills">
+                <div class="lid" style="background:rgba(100,140,200,0.4);"></div>
+                <div class="body" style="background:rgba(100,140,200,0.4);"><span class="clabel">Skills</span></div>
+              </div>
+              <div class="container-sm" style="width:11px; height:18px;">
+                <div class="lid" style="background:rgba(100,140,200,0.3);"></div>
+                <div class="body" style="height:14px; background:rgba(100,140,200,0.28);"></div>
+              </div>
+            </div>
+            <div class="shelf-bar"></div>
+          </div>
+        </div>
+
+        <div class="fridge-door-wrap">
+          <div class="fridge-door" id="fridgeDoor">
+            <div class="door-face">
+              <div class="door-gasket"></div>
+              <div class="door-handle"></div>
+              <div class="door-nameplate">Bhavya</div>
+            </div>
+            <div class="door-back"></div>
+          </div>
+        </div>
+
+        <div class="vent">
+          <div class="vent-slot"></div><div class="vent-slot"></div>
+          <div class="vent-slot"></div><div class="vent-slot"></div>
         </div>
       </div>
     </div>
 
-    <!-- Main appliances row -->
-    <div class="appliances-row">
-      <!-- Fridge -->
-      <div class="fridge-container">
-        <div class="fridge" id="fridge">
-          <div class="fridge-door">
-            <div class="fridge-nameplate">Bhavya</div>
-            <div class="fridge-handle">
-              <div class="handle-top"></div>
-              <div class="handle-highlight"></div>
-            </div>
-          </div>
-          <div class="fridge-interior" id="fridge-interior">
-            <!-- Top shelf: Experience -->
-            <div class="fridge-shelf" data-shelf="experience">
-              <div class="shelf-label">Experience</div>
-              <div class="shelf-items">
-                <div class="tupperware" data-item="experience-1">SWE Intern</div>
-                <div class="tupperware" data-item="experience-2">Open Source</div>
-                <div class="tupperware" data-item="experience-3">Side Projects</div>
-              </div>
-            </div>
-
-            <!-- Middle shelf: Projects -->
-            <div class="fridge-shelf" data-shelf="projects">
-              <div class="shelf-label">Projects</div>
-              <div class="shelf-items">
-                <div class="leftover-container" data-item="project-1">TailorCV</div>
-                <div class="leftover-container" data-item="project-2">pipguard-cli</div>
-                <div class="leftover-container" data-item="project-3">Voice Canvas</div>
-              </div>
-            </div>
-
-            <!-- Crisper drawer: Skills -->
-            <div class="crisper-drawer" data-shelf="skills">
-              <div class="shelf-label">Skills</div>
-              <div class="shelf-items">
-                <div class="skill-chip" data-skill="python">Python</div>
-                <div class="skill-chip" data-skill="fastapi">FastAPI</div>
-                <div class="skill-chip" data-skill="postgres">PostgreSQL</div>
-                <div class="skill-chip" data-skill="nextjs">Next.js</div>
-                <div class="skill-chip" data-skill="docker">Docker</div>
-                <div class="skill-chip" data-skill="git">Git</div>
-              </div>
-            </div>
-
-            <!-- Door top shelf: About Me -->
-            <div class="door-shelf door-top">
-              <div class="sauce-bottle" data-item="about"></div>
-            </div>
-
-            <!-- Door bottom shelf: Contact -->
-            <div class="door-shelf door-bottom">
-              <div class="condiment-jar" data-item="contact-1"></div>
-              <div class="condiment-jar" data-item="contact-2"></div>
-            </div>
-
-            <!-- Back wall: Things That Didn't Make It -->
-            <div class="fridge-back">
-              <div class="shelf-label">Didn't Make The Cut</div>
-              <div class="shelf-items expired-items">
-                <div class="expired-item" data-item="expired-1">
-                  <span class="expiry">3mo ago</span>
-                  Hackathon Project
-                </div>
-                <div class="expired-item" data-item="expired-2">
-                  <span class="expiry">6mo ago</span>
-                  ML Model
-                </div>
-                <div class="expired-item" data-item="expired-3">
-                  <span class="expiry">1yr ago</span>
-                  App Idea
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Cooktop/Stove -->
+    <!-- STOVE ZONE -->
+    <div class="stove-zone">
       <div class="stove-container">
         <div class="range-hood">
           <div class="hood-interior"></div>
         </div>
         <div class="stove">
-          <div class="burner-ring" data-burner="0"></div>
-          <div class="burner-ring" data-burner="1"></div>
-          <div class="burner-ring" data-burner="2"></div>
-          <div class="burner-ring" data-burner="3"></div>
+          <div class="burner-ring"></div>
+          <div class="burner-ring"></div>
+          <div class="burner-ring"></div>
+          <div class="burner-ring"></div>
           <div class="steam-wisp" style="--delay: 0s;"></div>
           <div class="steam-wisp" style="--delay: 0.3s;"></div>
           <div class="steam-wisp" style="--delay: 0.6s;"></div>
@@ -152,25 +826,15 @@
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- Corkboard -->
+    <!-- CORKBOARD ZONE -->
+    <div class="corkboard-zone">
       <div class="corkboard">
-        <div class="note note-1" style="transform: rotate(-2deg);">
-          <div class="pushpin"></div>
-          Available for co-op — May 2026
-        </div>
-        <div class="note note-2" style="transform: rotate(1.5deg);">
-          <div class="pushpin"></div>
-          <a href="https://github.com/bhavya" target="_blank">GitHub: github.com/bhavya</a>
-        </div>
-        <div class="note note-3" style="transform: rotate(-1deg);">
-          <div class="pushpin"></div>
-          <a href="https://linkedin.com/in/bhavya" target="_blank">LinkedIn: linkedin.com/in/bhavya</a>
-        </div>
-        <div class="note note-4" style="transform: rotate(2deg);">
-          <div class="pushpin"></div>
-          Email: b2goel@uwaterloo.ca
-        </div>
+        <div class="note" style="transform: rotate(-2deg);">Available for co-op — May 2026</div>
+        <div class="note" style="transform: rotate(1.5deg);"><a href="https://github.com/b2goel" target="_blank">GitHub: b2goel</a></div>
+        <div class="note" style="transform: rotate(-1deg);"><a href="https://linkedin.com/in/bhavyagoel" target="_blank">LinkedIn: bhavyagoel</a></div>
+        <div class="note" style="transform: rotate(2deg);">Email: b2goel@uwaterloo.ca</div>
         <div class="note clock-note" style="transform: rotate(-1.5deg);">
           <div class="pushpin"></div>
           <div class="analog-clock" id="clock">
@@ -184,136 +848,65 @@
         </div>
       </div>
     </div>
-
-    <!-- Counter surface -->
-    <div class="counter"></div>
-
-    <!-- Floor -->
-    <div class="floor"></div>
-
-    <!-- Builder panel (Cook flow Step 1) -->
-    <div class="builder-panel" id="builder-panel">
-      <div class="builder-header">🍳 Choose Your Dish</div>
-
-      <div class="builder-content">
-        <!-- Base selection -->
-        <div class="builder-section">
-          <h3>Base</h3>
-          <div class="card-group" id="base-group">
-            <label class="card-radio">
-              <input type="radio" name="base" value="swe">
-              <div class="card-label">Software Engineer</div>
-              <div class="card-desc">Backend, APIs, infra</div>
-            </label>
-            <label class="card-radio">
-              <input type="radio" name="base" value="ml">
-              <div class="card-label">ML / Data</div>
-              <div class="card-desc">Models, embeddings, search</div>
-            </label>
-            <label class="card-radio">
-              <input type="radio" name="base" value="devtools">
-              <div class="card-label">Dev Tools</div>
-              <div class="card-desc">CLIs, security, DX</div>
-            </label>
-            <label class="card-radio">
-              <input type="radio" name="base" value="product">
-              <div class="card-label">Product Builder</div>
-              <div class="card-desc">Shipped, user loops</div>
-            </label>
-          </div>
-        </div>
-
-        <!-- Toppings selection -->
-        <div class="builder-section">
-          <h3>Special Ingredient</h3>
-          <div class="card-group" id="topping-group">
-            <label class="card-checkbox">
-              <input type="checkbox" name="topping" value="tailorcv">
-              <div class="card-label">TailorCV</div>
-              <div class="card-desc">Semantic search, FastAPI</div>
-            </label>
-            <label class="card-checkbox">
-              <input type="checkbox" name="topping" value="pipguard">
-              <div class="card-label">pipguard-cli</div>
-              <div class="card-desc">PyPI package, security</div>
-            </label>
-            <label class="card-checkbox">
-              <input type="checkbox" name="topping" value="voicecanvas">
-              <div class="card-label">Voice Canvas</div>
-              <div class="card-desc">Next.js, real-time AI</div>
-            </label>
-          </div>
-        </div>
-
-        <!-- Style selection -->
-        <div class="builder-section">
-          <h3>Style</h3>
-          <div class="card-group" id="style-group">
-            <label class="card-radio">
-              <input type="radio" name="style" value="scrappy">
-              <div class="card-label">Scrappy</div>
-              <div class="card-desc">Gets it done</div>
-            </label>
-            <label class="card-radio">
-              <input type="radio" name="style" value="security">
-              <div class="card-label">Security</div>
-              <div class="card-desc">Risk-aware</div>
-            </label>
-            <label class="card-radio">
-              <input type="radio" name="style" value="research">
-              <div class="card-label">Research</div>
-              <div class="card-desc">Curious</div>
-            </label>
-            <label class="card-radio">
-              <input type="radio" name="style" value="ships">
-              <div class="card-label">Ships Fast</div>
-              <div class="card-desc">Iterate quick</div>
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <button class="cook-button" id="cook-button" disabled>
-        <span class="button-text">🔥 Cook</span>
-      </button>
-    </div>
-
-    <!-- Recipe card (Step 4) -->
-    <div class="recipe-card" id="recipe-card">
-      <div class="recipe-content">
-        <div class="recipe-emoji" id="recipe-emoji">🍲</div>
-        <h1 class="recipe-name" id="recipe-name">Rustic Backend Stew</h1>
-        <div class="recipe-divider"></div>
-        <p class="recipe-description" id="recipe-description">
-          The kind of engineer who will own the whole stack before lunch and have opinions about your indexing strategy by EOD.
-        </p>
-        <div class="recipe-meta">
-          <div class="meta-row">
-            <span class="meta-label">Pairs with:</span>
-            <span class="meta-value" id="recipe-pairs">Early-stage teams</span>
-          </div>
-          <div class="meta-row">
-            <span class="meta-label">Cook time:</span>
-            <span class="meta-value" id="recipe-time">1 sprint</span>
-          </div>
-        </div>
-        <div class="recipe-divider"></div>
-        <div class="recipe-buttons">
-          <button class="recipe-btn copy-btn" id="copy-btn">📋 Copy</button>
-          <button class="recipe-btn again-btn" id="again-btn">🔄 Cook Again</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Detail drawer -->
-    <div class="detail-drawer" id="detail-drawer">
-      <button class="drawer-close" id="drawer-close">✕</button>
-      <div class="drawer-content" id="drawer-content">
-        <!-- Content injected by JS -->
-      </div>
-    </div>
   </div>
 
-  <script src="script.js"></script>
+  <!-- ─── ROW 3: COUNTER ─── -->
+  <div class="counter"></div>
+
+  <!-- ─── ROW 4: FLOOR ─── -->
+  <div class="floor"></div>
+
+</div>
+
+<script>
+  // Fridge doors
+  document.getElementById('fridgeDoor').addEventListener('click', () => {
+    document.getElementById('fridgeDoor').classList.toggle('open');
+  });
+  document.getElementById('freezerDoor').addEventListener('click', () => {
+    document.getElementById('freezerDoor').classList.toggle('open');
+  });
+
+  // Cabinet doors
+  const cabinetDoors = document.querySelectorAll('.cabinet-door');
+  cabinetDoors.forEach(door => {
+    door.addEventListener('click', () => {
+      door.classList.toggle('open');
+    });
+  });
+  document.addEventListener('click', (e) => {
+    cabinetDoors.forEach(door => {
+      if (!door.contains(e.target)) {
+        door.classList.remove('open');
+      }
+    });
+  });
+
+  // Clock
+  function updateClock() {
+    const now = new Date();
+    const seconds = now.getSeconds();
+    const minutes = now.getMinutes();
+    const hours = now.getHours() % 12;
+    const secondDeg = (seconds / 60) * 360;
+    const minuteDeg = (minutes / 60) * 360 + (seconds / 60) * 6;
+    const hourDeg = (hours / 12) * 360 + (minutes / 60) * 30;
+    document.querySelector('.second-hand').style.transform = `rotate(${secondDeg}deg)`;
+    document.querySelector('.minute-hand').style.transform = `rotate(${minuteDeg}deg)`;
+    document.querySelector('.hour-hand').style.transform = `rotate(${hourDeg}deg)`;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  // Cook knob
+  function activateBurners() {
+    document.querySelectorAll('.burner-ring').forEach(b => b.classList.add('active'));
+    setTimeout(() => {
+      document.querySelectorAll('.burner-ring').forEach(b => b.classList.remove('active'));
+    }, 3000);
+  }
+  document.getElementById('cook-knob').addEventListener('click', activateBurners);
+</script>
+
 </body>
 </html>
