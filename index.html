@@ -1,912 +1,941 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bhavya's Kitchen</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bhavya — The Kitchen</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-    }
-
     body {
-      background: #F0EAE0;
+      background: #2a1a08;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
       font-family: 'Courier Prime', monospace;
     }
 
-    .kitchen-scene {
+    /* ─── KITCHEN SCENE ─── */
+    .kitchen {
+      position: relative;
       width: 100vw;
       height: 100vh;
-      display: grid;
-      grid-template-rows: 80px 1fr 70px 90px;
-      grid-template-columns: 1fr;
-      gap: 0;
-    }
-
-    /* ─── UPPER CABINETS ─── */
-    .upper-cabinets {
-      grid-row: 1;
-      grid-column: 1;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      padding: 10px 30px;
-      background: #F0EAE0;
-    }
-
-    .cabinet-door {
-      background: linear-gradient(135deg, #8B6914 0%, #A0791D 50%, #7A5F10 100%);
-      border-radius: 4px;
-      border: 2px solid #5a4510;
-      cursor: pointer;
-      transition: transform 0.5s ease-in-out;
-      transform-style: preserve-3d;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      position: relative;
-    }
-
-    .cabinet-door:hover {
-      filter: brightness(1.05);
-    }
-
-    .cabinet-door.open {
-      transform: rotateX(-110deg);
-    }
-
-    .cabinet-door-handle {
-      position: absolute;
-      width: 30px;
-      height: 8px;
-      background: #daa520;
-      border-radius: 2px;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3);
-    }
-
-    .cabinet-interior {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: #f9f6f0;
-      border-radius: 4px;
-      padding: 12px;
-      transform: rotateX(90deg);
-      transform-origin: top center;
-      font-size: 11px;
       overflow: hidden;
     }
 
-    .cabinet-interior h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 13px;
-      margin-bottom: 6px;
-      color: #C4572A;
+    /* ─── WOOD PLANK WALL ─── */
+    .wood-bg { position: absolute; inset: 0; background: #5c3d1e; }
+    .plank {
+      position: absolute; top: 0; bottom: 0;
+      border-right: 1px solid rgba(0,0,0,0.18);
+      border-left: 1px solid rgba(255,255,255,0.04);
     }
 
-    .cabinet-interior ul {
-      list-style: none;
-      font-size: 10px;
-      line-height: 1.4;
-    }
-
-    /* ─── APPLIANCES ROW ─── */
-    .appliances-row {
-      grid-row: 2;
-      grid-column: 1;
-      display: grid;
-      grid-template-columns: 28% 40% 32%;
-      gap: 0;
-      padding: 0;
-      align-items: stretch;
-      background: #F0EAE0;
-    }
-
-    /* ─── FRIDGE ZONE ─── */
-    .fridge-zone {
-      display: flex;
-      justify-content: center;
-      align-items: flex-end;
-      height: 100%;
-      padding: 0;
-    }
-
-    .fridge-wrap {
-      position: relative;
-      width: 280px;
-      height: 100%;
-    }
-
-    .fridge-body {
-      position: absolute; inset: 0;
-      background: linear-gradient(to right, #2e6868 0%, #488080 12%, #529090 50%, #488080 88%, #1e5858 100%);
-      border-radius: 10px;
-      box-shadow: 5px 8px 28px rgba(0,0,0,0.28);
-    }
-
-    .fridge-top-face {
-      position: absolute;
-      top: -7px; left: 4px; right: -8px; height: 8px;
-      background: #2a6060;
-      border-radius: 3px 3px 0 0;
-      transform: skewX(-45deg) scaleX(0.97);
-      transform-origin: bottom left;
-    }
-    .fridge-side-face {
-      position: absolute;
-      top: -3px; right: -9px; width: 10px; bottom: 8px;
-      background: #1a5050;
-      border-radius: 0 3px 3px 0;
-      transform: skewY(-45deg);
-      transform-origin: top left;
-    }
-
-    .freezer-section {
-      position: absolute;
-      top: 6px; left: 6px; right: 6px; height: 60px;
-      border-radius: 6px 6px 0 0;
-      overflow: hidden;
-    }
-    .freezer-interior {
-      position: absolute; inset: 0;
-      background: #b0d8d8;
-      border-radius: 6px 6px 0 0;
-      display: flex; align-items: center; justify-content: center;
-      gap: 5px; padding: 8px;
-    }
-    .sticky {
-      width: 40px; height: 40px;
-      border-radius: 2px; padding: 4px;
-      font-size: 6px; line-height: 1.2; color: #333;
-      display: flex; align-items: center; justify-content: center;
-      text-align: center;
-      box-shadow: 2px 2px 5px rgba(0,0,0,0.15);
-      flex-shrink: 0;
-    }
-
-    .freezer-divider {
-      position: absolute;
-      top: 63px; left: 6px; right: 6px; height: 3px;
-      background: #1a5050;
-    }
-
-    .freezer-door-wrap {
-      position: absolute;
-      top: 6px; left: 6px; right: 6px; height: 60px;
-      perspective: 800px;
-      perspective-origin: right center;
-    }
-    .freezer-door {
-      position: absolute; inset: 0;
-      transform-origin: right center;
-      transform: rotateY(0deg);
-      transition: transform 0.55s ease-in-out;
-      cursor: pointer;
-      transform-style: preserve-3d;
-    }
-    .freezer-door.open { transform: rotateY(-115deg); }
-    .freezer-door-face {
-      position: absolute; inset: 0;
-      background: linear-gradient(to right, #2a5858 0%, #3e7070 15%, #488080 50%, #3e7070 85%, #1a4848 100%);
-      border-radius: 6px 6px 0 0;
-      backface-visibility: visible;
-    }
-    .freezer-door-gasket {
-      position: absolute;
-      top: 6px; left: 6px; right: 6px; bottom: 6px;
-      border: 2px solid rgba(0,0,0,0.15);
-      border-radius: 4px;
+    /* ─── FAIRY LIGHTS ─── */
+    .fairy-string {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
       pointer-events: none;
     }
-    .freezer-handle {
+    .bulb {
       position: absolute;
-      top: 50%; transform: translateY(-50%); left: 12px;
-      width: 9px; height: 30px; border-radius: 5px;
-      background: linear-gradient(to right, rgba(255,255,255,0.3), rgba(255,255,255,0.7), rgba(255,255,255,0.4));
-    }
-    .freezer-handle::after {
-      content: '';
-      position: absolute; top: 3px; left: 2px; width: 2px; height: 24px;
-      background: rgba(255,255,255,0.4); border-radius: 2px;
-    }
-
-    .fridge-interior {
-      position: absolute;
-      top: 66px; left: 6px; right: 6px; bottom: 6px;
-      background: linear-gradient(to bottom, #daf2f2 0%, #c8eaea 50%, #b8e0e0 100%);
-      border-radius: 0 0 6px 6px;
-      overflow: hidden;
-      display: flex; flex-direction: column;
-      padding: 4px 4px 4px;
-    }
-    .interior-light {
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 80px; height: 15px; pointer-events: none;
-      background: radial-gradient(ellipse, rgba(255,255,255,0.9) 0%, transparent 100%);
-    }
-
-    .shelf-zone {
-      flex: 1;
-      display: flex; flex-direction: column; justify-content: flex-end;
-      padding: 0 2px 0;
-    }
-    .shelf-zone:last-child .shelf-bar { display: none; }
-
-    .shelf-contents {
-      display: flex; align-items: flex-end; gap: 3px;
-      padding: 2px 1px 2px;
-    }
-
-    .container-main {
-      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
-      width: 38px;
-      border-radius: 3px 3px 2px 2px;
-      padding-bottom: 3px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-      flex-shrink: 0;
-      cursor: pointer;
-      transition: transform 0.15s ease;
-    }
-    .container-main:hover {
-      transform: translateY(-2px);
-    }
-
-    .container-main .lid {
-      width: 100%; height: 5px;
-      border-radius: 3px 3px 0 0;
-      background: rgba(255,255,255,0.5);
-      border-bottom: 1px solid rgba(0,0,0,0.08);
-    }
-    .container-main .body {
-      width: 100%; flex: 1;
-      border-radius: 0 0 2px 2px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 5px;
-    }
-    .container-main .clabel {
-      font-size: 5px; font-weight: bold;
-      text-transform: uppercase; color: rgba(0,0,0,0.5);
-      text-align: center;
-    }
-
-    .container-sm {
-      border-radius: 2px 2px 1px 1px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      flex-shrink: 0; overflow: hidden;
-    }
-    .container-sm .lid {
-      height: 4px;
-      background: rgba(255,255,255,0.45);
-      border-bottom: 1px solid rgba(0,0,0,0.07);
-    }
-
-    .shelf-bar {
-      height: 4px; border-radius: 2px;
-      background: linear-gradient(to bottom, rgba(255,255,255,0.7) 0%, rgba(200,240,240,0.4) 100%);
-      border-top: 1px solid rgba(255,255,255,0.9);
-      border-bottom: 1px solid rgba(150,210,210,0.4);
-      margin: 0 -1px;
-    }
-
-    .fridge-door-wrap {
-      position: absolute;
-      top: 66px; left: 6px; right: 6px; bottom: 6px;
-      perspective: 1000px;
-      perspective-origin: right center;
-    }
-    .fridge-door {
-      position: absolute; inset: 0;
-      transform-origin: right center;
-      transform: rotateY(0deg);
-      transition: transform 0.65s ease-in-out;
-      cursor: pointer;
-      transform-style: preserve-3d;
-    }
-    .fridge-door.open { transform: rotateY(-125deg); }
-
-    .door-face {
-      position: absolute; inset: 0;
-      background: linear-gradient(to right, #2e6868 0%, #488080 12%, #529090 50%, #488080 88%, #2a6060 100%);
-      border-radius: 0 0 6px 6px;
-      backface-visibility: visible;
-    }
-    .door-gasket {
-      position: absolute;
-      top: 8px; left: 8px; right: 8px; bottom: 8px;
-      border: 2px solid rgba(0,0,0,0.15);
-      border-radius: 4px;
-      pointer-events: none;
-    }
-    .door-nameplate {
-      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-      background: rgba(20,60,60,0.7); padding: 3px 12px; border-radius: 2px;
-      color: #d0f0f0; font-family: 'Playfair Display', serif;
-      font-size: 11px; letter-spacing: 1px;
-      pointer-events: none;
-    }
-    .door-handle {
-      position: absolute; top: 50%; transform: translateY(-50%); left: 12px;
-      width: 8px; height: 50px; border-radius: 4px;
-      background: linear-gradient(to right, rgba(255,255,255,0.3), rgba(255,255,255,0.7), rgba(255,255,255,0.4));
-    }
-    .door-handle::after {
-      content: '';
-      position: absolute; top: 3px; left: 2px; width: 2px; height: 44px;
-      background: rgba(255,255,255,0.4); border-radius: 2px;
-    }
-    .door-back {
-      position: absolute; inset: 0;
-      background: #2a5858;
-      border-radius: 0 0 6px 6px;
-      transform: rotateY(180deg);
-      backface-visibility: visible;
-    }
-
-    .vent {
-      position: absolute; bottom: 8px; left: 12px; right: 12px; height: 5px;
-      background: #1a5050; border-radius: 1px;
-      display: flex; gap: 3px; align-items: center; padding: 0 4px; overflow: hidden;
-    }
-    .vent-slot { flex: 1; height: 2px; background: #0a4040; border-radius: 1px; }
-
-    /* ─── STOVE ZONE ─── */
-    .stove-zone {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      height: 100%;
-      padding: 0;
-    }
-
-    .stove-container {
-      width: 320px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .range-hood {
-      height: 50px;
-      background: linear-gradient(180deg, #3a3a3a 0%, #2a2a2a 100%);
-      border-radius: 0;
-      border: 2px solid #1a1a1a;
-      border-bottom: none;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    }
-
-    .hood-interior {
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, #1a1a1a 0%, #2a2a2a 50%, #1a1a1a 100%);
-      border-radius: 6px 6px 0 0;
-      opacity: 0.7;
-    }
-
-    .stove {
-      flex: 1;
-      background: #2A2A2A;
-      border-radius: 0;
-      border: 2px solid #1a1a1a;
-      border-top: none;
-      position: relative;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      grid-template-rows: 1fr 1fr;
-      gap: 20px;
-      padding: 25px 28px 70px 18px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-      align-content: start;
-      justify-items: center;
-    }
-
-    .burner-ring {
-      width: 48px;
-      height: 48px;
-      border: 3px solid #444;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #555, #222);
-      box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.8);
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .burner-ring.active {
-      border-color: #C4572A;
-      animation: burner-glow 1s infinite;
-    }
-
-    @keyframes burner-glow {
-      0%, 100% {
-        box-shadow:
-          inset 0 4px 8px rgba(0, 0, 0, 0.8),
-          0 0 15px rgba(196, 87, 42, 0.5);
-      }
-      50% {
-        box-shadow:
-          inset 0 4px 8px rgba(0, 0, 0, 0.8),
-          0 0 30px rgba(196, 87, 42, 0.8);
-      }
-    }
-
-    .steam-wisp {
-      position: absolute;
-      bottom: 45px;
-      left: 50%;
-      width: 16px;
-      height: 24px;
-      background: radial-gradient(ellipse at center, rgba(200, 200, 200, 0.6) 0%, transparent 70%);
-      border-radius: 50%;
-      transform: translateX(-50%);
-      animation: steam-float 2s ease-in infinite;
+      width: 9px; height: 13px;
+      border-radius: 50% 50% 45% 45%;
+      box-shadow: 0 0 6px 3px var(--glow);
+      animation: flicker var(--dur) ease-in-out infinite alternate;
       animation-delay: var(--delay);
       pointer-events: none;
     }
-
-    @keyframes steam-float {
-      0% {
-        transform: translateX(-50%) translateY(0) scale(1);
-        opacity: 0.6;
-      }
-      100% {
-        transform: translateX(-50%) translateY(-60px) scale(0.7);
-        opacity: 0;
-      }
+    .bulb::before {
+      content: '';
+      position: absolute; top: -4px; left: 2px;
+      width: 4px; height: 5px;
+      background: #777; border-radius: 1px;
+    }
+    @keyframes flicker {
+      0%   { opacity: 1; }
+      80%  { opacity: 1; }
+      83%  { opacity: 0.3; }
+      86%  { opacity: 1; }
+      92%  { opacity: 0.6; }
+      100% { opacity: 0.9; }
     }
 
-    .stove-face {
-      position: absolute;
-      bottom: 15px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .knob {
-      width: 30px;
-      height: 30px;
-      background: linear-gradient(135deg, #444 0%, #222 100%);
-      border-radius: 50%;
-      border: 2px solid #111;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.2s;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-    }
-
-    .knob:hover {
-      transform: rotate(15deg);
-    }
-
-    .knob-line {
-      width: 2px;
-      height: 10px;
-      background: #ccc;
-      position: absolute;
-      top: 3px;
-    }
-
-    .knob-label {
-      font-family: 'Playfair Display', serif;
-      font-size: 9px;
-      color: #F5F5DC;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    }
-
-    .pilot-light {
-      width: 7px;
-      height: 7px;
-      background: rgba(196, 87, 42, 0.3);
-      border-radius: 50%;
-      border: 1px solid #C4572A;
-      box-shadow: inset 0 0 2px rgba(0, 0, 0, 0.5);
-    }
-
-    /* ─── CORKBOARD ZONE ─── */
-    .corkboard-zone {
-      display: flex;
-      justify-content: stretch;
-      align-items: stretch;
-      height: 100%;
-      padding: 0;
-    }
-
-    .corkboard {
-      width: 100%;
-      height: 100%;
-      background: radial-gradient(circle 1px at 10px 20px, #b8860b 1px, transparent 1px);
-      background-size: 20px 20px;
-      background-color: #C19A6B;
-      border-radius: 0;
-      border: none;
-      padding: 20px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      align-items: center;
-      justify-content: center;
-      box-shadow: none;
-      flex-wrap: wrap;
-    }
-
-    .note {
-      background: #FDF6E3;
-      padding: 10px 12px;
-      border-radius: 2px;
-      font-size: 10px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-      position: relative;
-      max-width: 120px;
-      text-align: center;
-      line-height: 1.3;
-      color: #333;
-    }
-
-    .note a {
-      color: #C4572A;
-      text-decoration: none;
-    }
-
-    .note a:hover {
-      text-decoration: underline;
-    }
-
-    .pushpin {
-      position: absolute;
-      top: -7px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 9px;
-      height: 9px;
-      background: radial-gradient(circle at 30% 30%, #ff6b6b, #cc0000);
-      border-radius: 50%;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
-    }
-
-    .clock-note {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 8px;
-      background: transparent;
-      box-shadow: none;
-    }
-
-    .analog-clock {
-      width: 70px;
-      height: 70px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .clock-face {
-      position: relative;
-      width: 60px;
-      height: 60px;
-      border: 2px solid #333;
-      border-radius: 50%;
-      background: #F5F5DC;
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .clock-center {
-      position: absolute;
-      width: 5px;
-      height: 5px;
-      background: #333;
-      border-radius: 50%;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 10;
-    }
-
-    .hour-hand,
-    .minute-hand,
-    .second-hand {
-      position: absolute;
-      bottom: 50%;
-      left: 50%;
-      transform-origin: bottom center;
-      background: #333;
-    }
-
-    .hour-hand {
-      width: 3px;
-      height: 14px;
-      margin-left: -1.5px;
-    }
-
-    .minute-hand {
-      width: 2px;
-      height: 19px;
-      margin-left: -1px;
-    }
-
-    .second-hand {
-      width: 1px;
-      height: 21px;
-      background: #C4572A;
-      margin-left: -0.5px;
-    }
-
-    /* ─── COUNTER ─── */
-    .counter {
-      grid-row: 3;
-      grid-column: 1;
-      background: linear-gradient(180deg, #8B6914 0%, #8B6914 50%, #7a5f10 100%);
-      background-image:
-        linear-gradient(90deg, transparent 24%, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.05) 26%, transparent 27%, transparent 74%, rgba(255, 255, 255, 0.05) 75%, rgba(255, 255, 255, 0.05) 76%, transparent 77%, transparent),
-        linear-gradient(#8B6914, #8B6914);
-      background-size: 40px 100%, 100% 100%;
-      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.3);
+    /* ─── WARM LIGHT OVERLAY ─── */
+    .warm-overlay {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 20%, rgba(255,180,80,0.07) 0%, transparent 65%);
+      pointer-events: none;
     }
 
     /* ─── FLOOR ─── */
     .floor {
-      grid-row: 4;
-      grid-column: 1;
-      background-image:
-        linear-gradient(45deg, #E8DDD0 25%, transparent 25%),
-        linear-gradient(-45deg, #E8DDD0 25%, transparent 25%),
-        linear-gradient(45deg, transparent 75%, #E8DDD0 75%),
-        linear-gradient(-45deg, transparent 75%, #E8DDD0 75%);
-      background-size: 60px 60px;
-      background-position: 0 0, 0 30px, 30px -30px, -30px 0;
-      background-color: #D4C9BC;
+      position: absolute; bottom: 0; left: 0; right: 0; height: 80px;
+      background: repeating-linear-gradient(
+        90deg,
+        #3a2510 0px, #3a2510 48px,
+        #2e1d0c 48px, #2e1d0c 50px
+      );
+      border-top: 2px solid #2a1a08;
+    }
+
+    /* ─── APPLIANCES CONTAINER ─── */
+    .appliances {
+      position: absolute;
+      bottom: 80px;
+      left: 50%; transform: translateX(-50%);
+      display: flex;
+      gap: 80px;
+      align-items: flex-end;
+    }
+
+    /* ══════════════════════════════
+       FRIDGE
+    ══════════════════════════════ */
+    .fridge-wrap { position: relative; width: 180px; height: 360px; }
+
+    .fridge-body {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, #c0a880 0%, #ddc8a8 12%, #ece0cc 50%, #ddc8a8 88%, #b09870 100%);
+      border-radius: 10px;
+      box-shadow: 5px 8px 24px rgba(0,0,0,0.5);
+    }
+    .f-top-face {
+      position: absolute; top: -7px; left: 3px; right: -8px; height: 8px;
+      background: #b09870; border-radius: 3px 3px 0 0;
+      transform: skewX(-45deg) scaleX(0.97); transform-origin: bottom left;
+    }
+    .f-side-face {
+      position: absolute; top: -2px; right: -9px; width: 10px; bottom: 8px;
+      background: #a08860; border-radius: 0 3px 3px 0;
+      transform: skewY(-45deg); transform-origin: top left;
+    }
+
+    /* Freezer interior (behind freezer door) */
+    .f-freezer-interior {
+      position: absolute; top: 5px; left: 5px; right: 5px; height: 85px;
+      background: #c8e8e8;
+      border-radius: 6px 6px 0 0;
+      display: flex; align-items: center; justify-content: center;
+      gap: 6px; padding: 8px 6px; overflow: hidden;
+      z-index: 1;
+    }
+    .sticky {
+      width: 50px; height: 50px; border-radius: 2px; padding: 4px;
+      font-size: 7px; line-height: 1.3; color: #333;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center;
+      box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+      flex-shrink: 0;
+      font-family: 'Courier Prime', monospace;
+    }
+
+    /* Freezer door */
+    .f-freezer-door-wrap {
+      position: absolute; top: 5px; left: 5px; right: 5px; height: 85px;
+      perspective: 700px; perspective-origin: right center;
+      z-index: 2;
+    }
+    .f-freezer-door {
+      position: absolute; inset: 0;
+      transform-origin: right center; transform: rotateY(0deg);
+      transition: transform 0.55s ease-in-out;
+      cursor: pointer; transform-style: preserve-3d;
+    }
+    .f-freezer-door.open { transform: rotateY(-115deg); }
+    .f-freezer-door-face {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, #b8a888, #d0c0a0, #ddd0b8, #d0c0a0, #a89878);
+      border-radius: 6px 6px 0 0; backface-visibility: visible;
+    }
+    .f-freezer-gasket {
+      position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
+      border: 1.5px solid rgba(100,80,40,0.2); border-radius: 3px; pointer-events: none;
+    }
+    .f-freezer-handle {
+      position: absolute; top: 50%; transform: translateY(-50%); left: 10px;
+      width: 8px; height: 30px; border-radius: 4px;
+      background: linear-gradient(to right, rgba(180,160,120,0.6), rgba(255,245,220,0.9), rgba(180,160,120,0.6));
+    }
+    .f-freezer-handle::after {
+      content: ''; position: absolute; top: 3px; left: 2px; width: 2px; height: 24px;
+      background: rgba(255,255,255,0.5); border-radius: 1px;
+    }
+    .f-freezer-door-back {
+      position: absolute; inset: 0; background: #c8b890;
+      border-radius: 6px 6px 0 0; transform: rotateY(180deg); backface-visibility: visible;
+    }
+
+    /* Divider between freezer and main door */
+    .f-divider {
+      position: absolute; top: 89px; left: 5px; right: 5px; height: 3px;
+      background: #a08860; z-index: 3;
+    }
+
+    /* Main interior (behind main door) */
+    .f-interior {
+      position: absolute; top: 92px; left: 5px; right: 5px; bottom: 5px;
+      background: linear-gradient(to bottom, #f0f8f0 0%, #d8ede8 50%, #c8e4e0 100%);
+      border-radius: 0 0 7px 7px;
+      display: flex; flex-direction: column;
+      padding: 8px 6px 6px;
+      z-index: 1;
+    }
+    .f-shelf {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      border-bottom: 1px solid rgba(255,255,255,0.5);
+      font-size: 9px; font-weight: bold; letter-spacing: 1.5px;
+      text-transform: uppercase; color: #3a6050;
+      cursor: pointer;
+      transition: background 0.15s;
+      position: relative;
+      z-index: 10;
+    }
+    .f-shelf:hover { background: rgba(255,255,255,0.25); }
+    .f-shelf:last-child { border-bottom: none; }
+
+    /* Main door */
+    .f-door-wrap {
+      position: absolute; top: 92px; left: 5px; right: 5px; bottom: 5px;
+      perspective: 900px; perspective-origin: right center;
+      z-index: 2;
+    }
+    .f-door {
+      position: absolute; inset: 0;
+      transform-origin: right center; transform: rotateY(0deg);
+      transition: transform 0.65s ease-in-out;
+      cursor: pointer; transform-style: preserve-3d;
+    }
+    .f-door.open { transform: rotateY(-125deg); }
+    .f-door-wrap {
+      pointer-events: auto;
+    }
+    .f-door-face {
+      position: absolute; inset: 0;
+      background: linear-gradient(to right, #c0a880 0%, #ddc8a8 12%, #ece0cc 50%, #ddc8a8 88%, #b8a888 100%);
+      border-radius: 0 0 7px 7px; backface-visibility: visible;
+    }
+    .f-gasket {
+      position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px;
+      border: 1.5px solid rgba(100,80,40,0.2); border-radius: 3px; pointer-events: none;
+    }
+    .f-handle {
+      position: absolute; top: 50%; transform: translateY(-50%); left: 12px;
+      width: 8px; height: 65px; border-radius: 5px;
+      background: linear-gradient(to right, rgba(180,160,120,0.6), rgba(255,245,220,0.9), rgba(180,160,120,0.6));
+    }
+    .f-handle::after {
+      content: ''; position: absolute; top: 4px; left: 2px; width: 2px; height: 57px;
+      background: rgba(255,255,255,0.5); border-radius: 1px;
+    }
+    .f-nameplate {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: rgba(120,90,40,0.5); padding: 3px 12px; border-radius: 3px;
+      color: #f0e0c0; font-family: 'Playfair Display', serif;
+      font-size: 11px; letter-spacing: 1px; white-space: nowrap;
+    }
+    .f-door-back {
+      position: absolute; inset: 0; background: #c8b890;
+      border-radius: 0 0 7px 7px; transform: rotateY(180deg); backface-visibility: visible;
+    }
+
+    .f-vent {
+      position: absolute; bottom: 9px; left: 16px; right: 16px; height: 6px;
+      background: #a08860; border-radius: 2px; z-index: 3;
+      display: flex; gap: 5px; align-items: center; padding: 0 6px; overflow: hidden;
+    }
+    .f-vent-slot { flex: 1; height: 2px; background: #886840; border-radius: 1px; }
+
+    /* ══════════════════════════════
+       STOVE / COOKTOP
+    ══════════════════════════════ */
+    .stove-wrap { position: relative; width: 220px; height: 290px; }
+    .stove-body {
+      position: absolute; inset: 0;
+      background: #1e1e1e; border-radius: 10px;
+      box-shadow: 5px 8px 24px rgba(0,0,0,0.6);
+    }
+    .stove-hood {
+      position: absolute; top: 0; left: 0; right: 0; height: 24px;
+      background: #2a2a2a; border-radius: 10px 10px 0 0;
+      border-bottom: 2px solid #444;
+    }
+    .stove-hood::after {
+      content: '';
+      position: absolute; bottom: 0; left: 20px; right: 20px; height: 1px;
+      background: rgba(255,255,255,0.08);
+    }
+    .burners {
+      position: absolute; top: 32px; left: 0; right: 0;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px; padding: 16px;
+    }
+    .burner {
+      width: 66px; height: 66px; border-radius: 50%;
+      background: radial-gradient(circle, #2a2a2a 30%, #1a1a1a 70%, #111 100%);
+      border: 3px solid #333;
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+      justify-self: center;
+      transition: box-shadow 0.3s, background 0.3s;
+    }
+    .burner.active {
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5),
+                  0 0 12px 4px rgba(255,100,20,0.7),
+                  0 0 28px 10px rgba(255,60,0,0.3);
+      background: radial-gradient(circle, #ff6b20 0%, #cc3300 40%, #1a1a1a 70%);
+    }
+    .knob-area {
+      position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      cursor: pointer;
+    }
+    .knob {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #555, #222);
+      border: 2px solid #444;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.2s;
+    }
+    .knob:hover { transform: rotate(30deg); }
+    .knob-line { width: 2px; height: 9px; background: #888; border-radius: 1px; }
+    .cook-label {
+      font-size: 8px; letter-spacing: 1.5px;
+      color: #C4572A; text-transform: uppercase;
+      font-family: 'Courier Prime', monospace;
+    }
+    .pilot {
+      width: 5px; height: 5px; border-radius: 50%;
+      background: #ff4400;
+      box-shadow: 0 0 4px 2px rgba(255,80,0,0.6);
+    }
+
+    /* ══════════════════════════════
+       MODALS
+    ══════════════════════════════ */
+    .modal-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
+      z-index: 1000;
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .modal-overlay.active {
+      display: flex;
+      align-items: center; justify-content: center;
+      opacity: 1;
+    }
+
+    .modal {
+      background: linear-gradient(135deg, #ece0cc 0%, #ddc8a8 50%, #c0a880 100%);
+      border-radius: 12px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      padding: 0;
+      max-width: 500px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+      transform: scale(0.8);
+      transition: transform 0.3s ease;
+      border: 3px solid #a08860;
+      color: #2a1a08;
+      font-family: 'Courier Prime', monospace;
+    }
+    .modal-overlay.active .modal {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      background: linear-gradient(to right, #a08860, #b89870, #a08860);
+      padding: 20px;
+      border-bottom: 2px solid #886840;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-title {
+      font-size: 20px; font-weight: bold;
+      font-family: 'Playfair Display', serif;
+      letter-spacing: 1px;
+    }
+    .modal-close {
+      background: none; border: none;
+      font-size: 24px; cursor: pointer;
+      color: #2a1a08; transition: transform 0.2s;
+    }
+    .modal-close:hover { transform: rotate(90deg); }
+
+    .modal-content {
+      padding: 24px;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+    .modal-section {
+      margin-bottom: 20px;
+    }
+    .modal-section:last-child {
+      margin-bottom: 0;
+    }
+    .modal-section h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      margin-bottom: 8px;
+      color: #5c3d1e;
+      text-decoration: underline;
+    }
+    .modal-section ul {
+      margin-left: 20px;
+    }
+    .modal-section li {
+      margin-bottom: 8px;
+    }
+
+    .modal-divider {
+      height: 1px;
+      background: rgba(100,80,40,0.3);
+      margin: 16px 0;
     }
   </style>
 </head>
 <body>
 
-<div class="kitchen-scene">
-
-  <!-- ─── ROW 1: UPPER CABINETS ─── -->
-  <div class="upper-cabinets">
-    <div class="cabinet-door">
-      <div class="cabinet-door-handle"></div>
-      <div class="cabinet-interior">
-        <h3>Reading</h3>
-        <ul>
-          <li>Pragmatic Programmer</li>
-          <li>Software Design</li>
-          <li>Data Intensive Apps</li>
-        </ul>
-      </div>
-    </div>
-    <div class="cabinet-door">
-      <div class="cabinet-door-handle"></div>
-      <div class="cabinet-interior">
-        <h3>Fun Facts</h3>
-        <ul>
-          <li>First API freshman year</li>
-          <li>Love optimization</li>
-          <li>Terrible cook!</li>
-        </ul>
-      </div>
-    </div>
-    <div class="cabinet-door">
-      <div class="cabinet-door-handle"></div>
-      <div class="cabinet-interior">
-        <h3>Learning</h3>
-        <ul>
-          <li>Distributed systems</li>
-          <li>Authorization patterns</li>
-          <li>High-perf Go</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-
-  <!-- ─── ROW 2: APPLIANCES ─── -->
-  <div class="appliances-row">
-    <!-- FRIDGE ZONE -->
-    <div class="fridge-zone">
-      <div class="fridge-wrap">
-        <div class="fridge-body"></div>
-        <div class="fridge-top-face"></div>
-        <div class="fridge-side-face"></div>
-
-        <div class="freezer-section">
-          <div class="freezer-interior">
-            <div class="sticky" style="background:#fff9c4; transform:rotate(-2deg);">🏅</div>
-            <div class="sticky" style="background:#c8e6c9; transform:rotate(2deg);">CS+Math</div>
-            <div class="sticky" style="background:#ffe0b2; transform:rotate(-1deg);">PyPI@19</div>
-          </div>
-        </div>
-        <div class="freezer-divider"></div>
-
-        <div class="freezer-door-wrap">
-          <div class="freezer-door" id="freezerDoor">
-            <div class="freezer-door-face">
-              <div class="freezer-door-gasket"></div>
-              <div class="freezer-handle"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="fridge-interior">
-          <div class="interior-light"></div>
-          <div class="shelf-zone">
-            <div class="shelf-contents">
-              <div class="container-main" style="height:28px;" data-section="exp">
-                <div class="lid"></div>
-                <div class="body" style="background:rgba(100,180,160,0.55);"><span class="clabel">Exp</span></div>
-              </div>
-              <div class="container-sm" style="width:15px; height:22px;">
-                <div class="lid"></div>
-                <div class="body" style="height:17px; background:rgba(120,190,170,0.4);"></div>
-              </div>
-            </div>
-            <div class="shelf-bar"></div>
-          </div>
-          <div class="shelf-zone">
-            <div class="shelf-contents">
-              <div class="container-main" style="height:26px;" data-section="proj">
-                <div class="lid" style="background:rgba(200,120,100,0.4);"></div>
-                <div class="body" style="background:rgba(200,120,100,0.45);"><span class="clabel">Proj</span></div>
-              </div>
-              <div class="container-sm" style="width:13px; height:20px;">
-                <div class="lid" style="background:rgba(200,120,100,0.35);"></div>
-                <div class="body" style="height:16px; background:rgba(200,120,100,0.3);"></div>
-              </div>
-            </div>
-            <div class="shelf-bar"></div>
-          </div>
-          <div class="shelf-zone">
-            <div class="shelf-contents">
-              <div class="container-main" style="height:24px;" data-section="skills">
-                <div class="lid" style="background:rgba(100,140,200,0.4);"></div>
-                <div class="body" style="background:rgba(100,140,200,0.4);"><span class="clabel">Skills</span></div>
-              </div>
-              <div class="container-sm" style="width:11px; height:18px;">
-                <div class="lid" style="background:rgba(100,140,200,0.3);"></div>
-                <div class="body" style="height:14px; background:rgba(100,140,200,0.28);"></div>
-              </div>
-            </div>
-            <div class="shelf-bar"></div>
-          </div>
-        </div>
-
-        <div class="fridge-door-wrap">
-          <div class="fridge-door" id="fridgeDoor">
-            <div class="door-face">
-              <div class="door-gasket"></div>
-              <div class="door-handle"></div>
-              <div class="door-nameplate">Bhavya</div>
-            </div>
-            <div class="door-back"></div>
-          </div>
-        </div>
-
-        <div class="vent">
-          <div class="vent-slot"></div><div class="vent-slot"></div>
-          <div class="vent-slot"></div><div class="vent-slot"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STOVE ZONE -->
-    <div class="stove-zone">
-      <div class="stove-container">
-        <div class="range-hood">
-          <div class="hood-interior"></div>
-        </div>
-        <div class="stove">
-          <div class="burner-ring"></div>
-          <div class="burner-ring"></div>
-          <div class="burner-ring"></div>
-          <div class="burner-ring"></div>
-          <div class="steam-wisp" style="--delay: 0s;"></div>
-          <div class="steam-wisp" style="--delay: 0.3s;"></div>
-          <div class="steam-wisp" style="--delay: 0.6s;"></div>
-          <div class="stove-face">
-            <div class="knob" id="cook-knob">
-              <div class="knob-line"></div>
-            </div>
-            <div class="knob-label">Cook Something</div>
-            <div class="pilot-light"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- CORKBOARD ZONE -->
-    <div class="corkboard-zone">
-      <div class="corkboard">
-        <div class="note" style="transform: rotate(-2deg);">Available for co-op — May 2026</div>
-        <div class="note" style="transform: rotate(1.5deg);"><a href="https://github.com/b2goel" target="_blank">GitHub: b2goel</a></div>
-        <div class="note" style="transform: rotate(-1deg);"><a href="https://linkedin.com/in/bhavyagoel" target="_blank">LinkedIn: bhavyagoel</a></div>
-        <div class="note" style="transform: rotate(2deg);">Email: b2goel@uwaterloo.ca</div>
-        <div class="note clock-note" style="transform: rotate(-1.5deg);">
-          <div class="pushpin"></div>
-          <div class="analog-clock" id="clock">
-            <div class="clock-face">
-              <div class="clock-center"></div>
-              <div class="hour-hand"></div>
-              <div class="minute-hand"></div>
-              <div class="second-hand"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ─── ROW 3: COUNTER ─── -->
-  <div class="counter"></div>
-
-  <!-- ─── ROW 4: FLOOR ─── -->
+<div class="kitchen" id="kitchen">
+  <div class="wood-bg" id="woodBg"></div>
+  <div class="warm-overlay"></div>
+  <svg class="fairy-string" id="fairySvg" xmlns="http://www.w3.org/2000/svg"></svg>
+  <div id="bulbContainer"></div>
   <div class="floor"></div>
 
+  <div class="appliances">
+
+    <!-- ── FRIDGE ── -->
+    <div class="fridge-wrap">
+      <div class="fridge-body"></div>
+      <div class="f-top-face"></div>
+      <div class="f-side-face"></div>
+
+      <!-- Freezer interior -->
+      <div class="f-freezer-interior">
+        <div class="sticky" style="background:#fff9c4;transform:rotate(-2deg);">National Math Scholarship 🏅</div>
+        <div class="sticky" style="background:#c8e6c9;transform:rotate(2deg);">Waterloo CS + Math</div>
+        <div class="sticky" style="background:#ffe0b2;transform:rotate(-1deg);">PyPI package at 19</div>
+      </div>
+
+      <!-- Freezer door -->
+      <div class="f-freezer-door-wrap">
+        <div class="f-freezer-door" id="freezerDoor">
+          <div class="f-freezer-door-face">
+            <div class="f-freezer-gasket"></div>
+            <div class="f-freezer-handle"></div>
+          </div>
+          <div class="f-freezer-door-back"></div>
+        </div>
+      </div>
+
+      <div class="f-divider"></div>
+
+      <!-- Main interior -->
+      <div class="f-interior">
+        <div class="f-shelf" data-section="experience">Experience</div>
+        <div class="f-shelf" data-section="projects">Projects</div>
+        <div class="f-shelf" data-section="skills">Skills</div>
+        <div class="f-shelf" data-section="about">About</div>
+      </div>
+
+      <!-- Main door -->
+      <div class="f-door-wrap">
+        <div class="f-door" id="fridgeDoor">
+          <div class="f-door-face">
+            <div class="f-gasket"></div>
+            <div class="f-handle"></div>
+            <div class="f-nameplate">Bhavya</div>
+          </div>
+          <div class="f-door-back"></div>
+        </div>
+      </div>
+
+      <div class="f-vent">
+        <div class="f-vent-slot"></div><div class="f-vent-slot"></div>
+        <div class="f-vent-slot"></div><div class="f-vent-slot"></div>
+        <div class="f-vent-slot"></div><div class="f-vent-slot"></div>
+      </div>
+    </div>
+
+    <!-- ── STOVE ── -->
+    <div class="stove-wrap">
+      <div class="stove-body">
+        <div class="stove-hood"></div>
+        <div class="burners">
+          <div class="burner" id="b1"></div>
+          <div class="burner" id="b2"></div>
+          <div class="burner" id="b3"></div>
+          <div class="burner" id="b4"></div>
+        </div>
+        <div class="knob-area" id="cookKnob">
+          <div class="knob"><div class="knob-line"></div></div>
+          <div class="cook-label">Cook Something</div>
+          <div class="pilot"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Modal Overlay -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal" id="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="modalTitle">Title</div>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-content" id="modalContent">
+        <!-- Content gets injected here -->
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
-  // Fridge doors
-  document.getElementById('fridgeDoor').addEventListener('click', () => {
-    document.getElementById('fridgeDoor').classList.toggle('open');
-  });
-  document.getElementById('freezerDoor').addEventListener('click', () => {
-    document.getElementById('freezerDoor').classList.toggle('open');
-  });
+  const kitchen = document.getElementById('kitchen');
+  const W = window.innerWidth;
+  const H = window.innerHeight;
 
-  // Cabinet doors
-  const cabinetDoors = document.querySelectorAll('.cabinet-door');
-  cabinetDoors.forEach(door => {
-    door.addEventListener('click', () => {
-      door.classList.toggle('open');
+  // ── Wood planks ──
+  const woodBg = document.getElementById('woodBg');
+  const plankColors = ['#5c3d1e','#4e3318','#634425','#573d20','#4a3015','#5a3b1c','#623f22','#503819'];
+  let px = 0, pi = 0;
+  while (px < W + 60) {
+    const w = 38 + Math.floor(Math.random() * 22);
+    const d = document.createElement('div');
+    d.className = 'plank';
+    d.style.cssText = `left:${px}px;width:${w}px;background:${plankColors[pi % plankColors.length]};`;
+    woodBg.appendChild(d);
+    px += w + 1; pi++;
+  }
+
+  // ── Fairy lights ──
+  const svg = document.getElementById('fairySvg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('width', W);
+  svg.setAttribute('height', H);
+  const bulbContainer = document.getElementById('bulbContainer');
+
+  const bulbColors = [
+    {bg:'#ffdd88',glow:'rgba(255,210,80,0.85)'},
+    {bg:'#ffaa55',glow:'rgba(255,140,50,0.85)'},
+    {bg:'#ff8844',glow:'rgba(255,100,40,0.8)'},
+    {bg:'#ffcc66',glow:'rgba(255,190,60,0.85)'},
+    {bg:'#ff9966',glow:'rgba(255,130,60,0.8)'},
+    {bg:'#ffe066',glow:'rgba(255,200,50,0.85)'},
+  ];
+
+  // safe zone — no lights behind appliances
+  const appW = 180 + 80 + 220;
+  const appLeft = (W - appW) / 2;
+  const appRight = appLeft + appW;
+  const appTop = H - 80 - 360;
+  function isBehind(x, y) {
+    return x > appLeft - 20 && x < appRight + 20 && y > appTop - 10;
+  }
+
+  // string 1: top edge with gentle sag
+  const s1 = [];
+  for (let i = 0; i <= 12; i++) {
+    const t = i / 12;
+    const x = 20 + t * (W - 40);
+    const lt = (t * 12) % 1;
+    const sag = Math.sin(lt * Math.PI) * (14 + Math.random() * 10);
+    s1.push({ x, y: 10 + Math.random() * 16 + sag });
+  }
+
+  // string 2: left side zigzag
+  const s2 = [];
+  let sy2 = 20;
+  while (sy2 < H - 90) {
+    s2.push({ x: 14 + Math.random() * 55, y: sy2 });
+    sy2 += 42 + Math.random() * 32;
+  }
+
+  // string 3: right side zigzag
+  const s3 = [];
+  let sy3 = 25;
+  while (sy3 < H - 90) {
+    s3.push({ x: W - 14 - Math.random() * 55, y: sy3 });
+    sy3 += 42 + Math.random() * 32;
+  }
+
+  // string 4: bottom edge
+  const s4 = [];
+  for (let i = 0; i <= 8; i++) {
+    const t = i / 8;
+    const x = 20 + t * (W - 40);
+    const lt = (t * 8) % 1;
+    const sag = Math.sin(lt * Math.PI) * 8;
+    s4.push({ x, y: H - 14 - Math.random() * 10 - sag });
+  }
+
+  // string 5: top-left diagonal staying clear of appliances
+  const s5 = [
+    { x: 25, y: 40 + Math.random() * 20 },
+    { x: 80 + Math.random() * 40, y: 80 + Math.random() * 30 },
+    { x: 150 + Math.random() * 30, y: 45 + Math.random() * 25 },
+    { x: appLeft - 30, y: 90 + Math.random() * 30 },
+  ];
+
+  // string 6: top-right diagonal staying clear of appliances
+  const s6 = [
+    { x: W - 25, y: 45 + Math.random() * 20 },
+    { x: W - 80 - Math.random() * 40, y: 85 + Math.random() * 30 },
+    { x: W - 150 - Math.random() * 30, y: 50 + Math.random() * 25 },
+    { x: appRight + 30, y: 95 + Math.random() * 30 },
+  ];
+
+  [s1, s2, s3, s4, s5, s6].forEach((pts, si) => {
+    const safe = pts.filter(p => !isBehind(p.x, p.y));
+    if (safe.length < 2) return;
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', safe.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' '));
+    path.setAttribute('stroke', 'rgba(90,65,40,0.5)');
+    path.setAttribute('stroke-width', '1.2');
+    path.setAttribute('fill', 'none');
+    svg.appendChild(path);
+
+    safe.forEach((p, i) => {
+      const c = bulbColors[(si * 4 + i) % bulbColors.length];
+      const el = document.createElement('div');
+      el.className = 'bulb';
+      el.style.cssText = `
+        left:${(p.x - 4).toFixed(1)}px;
+        top:${(p.y - 6).toFixed(1)}px;
+        background:${c.bg};
+        --glow:${c.glow};
+        --dur:${(1.8 + Math.random() * 3).toFixed(1)}s;
+        --delay:${(Math.random() * 5).toFixed(2)}s;
+      `;
+      bulbContainer.appendChild(el);
     });
   });
-  document.addEventListener('click', (e) => {
-    cabinetDoors.forEach(door => {
-      if (!door.contains(e.target)) {
-        door.classList.remove('open');
-      }
+
+  // ── Fridge door toggles ──
+  document.querySelector('.f-door-wrap').addEventListener('click', function(e) {
+    const door = document.getElementById('fridgeDoor');
+    const shelf = e.target.closest('.f-shelf');
+
+    if (shelf) {
+      // shelf click — open modal, don't touch door
+      onShelfClick(shelf.dataset.section);
+      return;
+    }
+
+    if (!door.classList.contains('open')) {
+      door.classList.add('open');
+      this.style.zIndex = '0'; // drop below interior so shelves get clicks
+    } else {
+      door.classList.remove('open');
+      this.style.zIndex = '2'; // restore so door is clickable again
+    }
+  });
+  document.getElementById('freezerDoor').addEventListener('click', function () {
+    this.classList.toggle('open');
+  });
+
+  // ── Modal System ──
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modal = document.getElementById('modal');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalContent = document.getElementById('modalContent');
+  const modalClose = document.getElementById('modalClose');
+
+  const experiences = [
+    { name: 'University of Waterloo', desc: 'CS + Math degree, GPA 3.8/4.0' },
+    { name: 'National Math Scholarship', desc: 'Awarded for exceptional mathematical aptitude' },
+    { name: 'PyPI Package Creator', desc: 'Published package at age 19' }
+  ];
+
+  const projects = [
+    { name: 'PyPI Package', desc: 'Data processing automation tool' },
+    { name: 'Mathematical Algorithms', desc: 'Combinatorics & computational math' },
+    { name: 'This Portfolio', desc: 'Interactive 3D kitchen experience' }
+  ];
+
+  const sectionContent = {
+    experience: {
+      title: '💼 Experience',
+      html: `
+        <div class="modal-section">
+          <h3>University of Waterloo</h3>
+          <p>Pursuing degree in Computer Science & Mathematics</p>
+          <p>GPA: 3.8/4.0</p>
+        </div>
+        <div class="modal-divider"></div>
+        <div class="modal-section">
+          <h3>Achievements</h3>
+          <ul>
+            <li>National Math Scholarship recipient</li>
+            <li>Published open-source package at 19</li>
+            <li>Strong foundation in algorithms & theory</li>
+          </ul>
+        </div>
+      `
+    },
+    projects: {
+      title: '🚀 Projects',
+      html: `
+        <div class="modal-section">
+          <h3>PyPI Package</h3>
+          <p>Published Python package at age 19 with 1000+ downloads. Focused on data processing automation.</p>
+        </div>
+        <div class="modal-divider"></div>
+        <div class="modal-section">
+          <h3>Mathematical Research</h3>
+          <p>Projects in combinatorics, algorithms, and computational mathematics during university.</p>
+        </div>
+        <div class="modal-divider"></div>
+        <div class="modal-section">
+          <h3>This Portfolio</h3>
+          <p>Interactive kitchen-themed portfolio with 3D CSS animations and vanilla JavaScript.</p>
+        </div>
+      `
+    },
+    skills: {
+      title: '⚙️ Skills',
+      html: `
+        <div class="modal-section">
+          <h3>Languages</h3>
+          <p>Python • JavaScript • Java • C++ • SQL • HTML/CSS</p>
+        </div>
+        <div class="modal-divider"></div>
+        <div class="modal-section">
+          <h3>Frameworks & Tools</h3>
+          <p>React • Node.js • TensorFlow • Pandas • Git • Docker</p>
+        </div>
+        <div class="modal-divider"></div>
+        <div class="modal-section">
+          <h3>Specialties</h3>
+          <ul>
+            <li>Machine Learning & AI</li>
+            <li>Web Development</li>
+            <li>Data Analysis</li>
+            <li>Algorithm Design</li>
+          </ul>
+        </div>
+      `
+    },
+    about: {
+      title: '👋 About Me',
+      html: `
+        <div class="modal-section">
+          <p>Hi! I'm Bhavya, a Computer Science and Mathematics student at the University of Waterloo.</p>
+        </div>
+        <div class="modal-divider"></div>
+        <div class="modal-section">
+          <h3>Highlights</h3>
+          <ul>
+            <li>National Math Scholarship recipient</li>
+            <li>Published open-source package at 19</li>
+            <li>Passionate about AI & machine learning</li>
+            <li>Love creative problem-solving</li>
+          </ul>
+        </div>
+        <div class="modal-divider"></div>
+        <div class="modal-section">
+          <p>When I'm not coding, you'll find me exploring new technologies or working on personal projects.</p>
+        </div>
+      `
+    }
+  };
+
+  let selectedExperience = null;
+  let selectedProject = null;
+
+  function openModal(section) {
+    const content = sectionContent[section];
+    if (!content) return;
+
+    modalTitle.textContent = content.title;
+    modalContent.innerHTML = content.html;
+    modalOverlay.classList.add('active');
+  }
+
+  function openCookModal() {
+    selectedExperience = null;
+    selectedProject = null;
+
+    modalTitle.textContent = '👨‍🍳 Cook Something — inspired by cmh live counter';
+    modalContent.innerHTML = `
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start;">
+        <div>
+          <h3 style="font-family: 'Playfair Display', serif; font-size: 14px; margin-bottom: 12px; color: #5c3d1e; text-decoration: underline;">Choose Your Base <span style="font-size: 12px; color: #886840;">(max 1)</span></h3>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            ${experiences.map((exp, i) => `
+              <button style="
+                padding: 8px;
+                background: ${selectedExperience === i ? '#a08860' : '#d4c5a8'};
+                border: 2px solid #886840;
+                border-radius: 6px;
+                cursor: pointer;
+                font-family: 'Courier Prime', monospace;
+                font-size: 12px;
+                text-align: left;
+                transition: all 0.2s;
+                color: #2a1a08;
+              " class="exp-btn" data-idx="${i}">
+                <strong>${exp.name}</strong><br>
+                <small style="opacity: 0.7;">${exp.desc}</small>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+        <div>
+          <h3 style="font-family: 'Playfair Display', serif; font-size: 14px; margin-bottom: 12px; color: #5c3d1e; text-decoration: underline;">Choose Your Toppings <span style="font-size: 12px; color: #886840;">(max 3)</span></h3>
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            ${projects.map((proj, i) => `
+              <button style="
+                padding: 8px;
+                background: ${selectedProject === i ? '#a08860' : '#d4c5a8'};
+                border: 2px solid #886840;
+                border-radius: 6px;
+                cursor: pointer;
+                font-family: 'Courier Prime', monospace;
+                font-size: 12px;
+                text-align: left;
+                transition: all 0.2s;
+                color: #2a1a08;
+              " class="proj-btn" data-idx="${i}">
+                <strong>${proj.name}</strong><br>
+                <small style="opacity: 0.7;">${proj.desc}</small>
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 16px;">
+        <button id="cookSummaryBtn" style="
+          width: 100%;
+          padding: 12px;
+          background: ${selectedExperience !== null && selectedProject !== null ? '#a08860' : '#ccc'};
+          border: 2px solid #886840;
+          border-radius: 6px;
+          cursor: ${selectedExperience !== null && selectedProject !== null ? 'pointer' : 'not-allowed'};
+          font-family: 'Playfair Display', serif;
+          font-size: 14px;
+          font-weight: bold;
+          transition: all 0.2s;
+          color: #2a1a08;
+        " ${selectedExperience === null || selectedProject === null ? 'disabled' : ''}>
+          Let's Cook
+        </button>
+      </div>
+    `;
+
+    // Add event listeners for experience buttons
+    document.querySelectorAll('.exp-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        selectedExperience = parseInt(this.dataset.idx);
+        openCookModal();
+      });
+    });
+
+    // Add event listeners for project buttons
+    document.querySelectorAll('.proj-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        selectedProject = parseInt(this.dataset.idx);
+        openCookModal();
+      });
+    });
+
+    // Add listener for summary button
+    const summaryBtn = document.getElementById('cookSummaryBtn');
+    if (summaryBtn && selectedExperience !== null && selectedProject !== null) {
+      summaryBtn.addEventListener('click', showCookSummary);
+    }
+
+    modalOverlay.classList.add('active');
+  }
+
+  function showCookSummary() {
+    const exp = experiences[selectedExperience];
+    const proj = projects[selectedProject];
+
+    modalTitle.textContent = '✨ Your Recipe';
+    modalContent.innerHTML = `
+      <div class="modal-section">
+        <h3>Combining:</h3>
+        <p><strong>${exp.name}</strong></p>
+        <p style="color: #666; font-size: 12px;">${exp.desc}</p>
+      </div>
+      <div class="modal-divider"></div>
+      <div class="modal-section">
+        <p><strong>${proj.name}</strong></p>
+        <p style="color: #666; font-size: 12px;">${proj.desc}</p>
+      </div>
+      <div class="modal-divider"></div>
+      <div class="modal-section">
+        <h3>The Recipe:</h3>
+        <p>I combined my ${exp.name.toLowerCase()} with my expertise in ${proj.name.toLowerCase()} to create something meaningful. This blend of theoretical knowledge and practical application drives my approach to problem-solving and innovation.</p>
+      </div>
+      <div class="modal-section">
+        <button id="cookAgainBtn" style="
+          width: 100%;
+          padding: 10px;
+          background: #d4c5a8;
+          border: 2px solid #886840;
+          border-radius: 6px;
+          cursor: pointer;
+          font-family: 'Courier Prime', monospace;
+          font-size: 13px;
+          transition: all 0.2s;
+        ">Cook Again</button>
+      </div>
+    `;
+
+    document.getElementById('cookAgainBtn').addEventListener('click', openCookModal);
+    modalOverlay.classList.add('active');
+  }
+
+  function closeModal() {
+    modalOverlay.classList.remove('active');
+  }
+
+  // Close on background click
+  modalOverlay.addEventListener('click', e => {
+    if (e.target === modalOverlay) closeModal();
+  });
+
+  // Close button
+  modalClose.addEventListener('click', closeModal);
+
+  // Close on Escape key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // ── Shelf clicks ──
+  function onShelfClick(section) {
+    openModal(section);
+  }
+  document.querySelectorAll('.f-shelf').forEach(el => {
+    el.addEventListener('click', e => {
+      e.stopPropagation();
+      onShelfClick(el.dataset.section);
     });
   });
 
-  // Clock
-  function updateClock() {
-    const now = new Date();
-    const seconds = now.getSeconds();
-    const minutes = now.getMinutes();
-    const hours = now.getHours() % 12;
-    const secondDeg = (seconds / 60) * 360;
-    const minuteDeg = (minutes / 60) * 360 + (seconds / 60) * 6;
-    const hourDeg = (hours / 12) * 360 + (minutes / 60) * 30;
-    document.querySelector('.second-hand').style.transform = `rotate(${secondDeg}deg)`;
-    document.querySelector('.minute-hand').style.transform = `rotate(${minuteDeg}deg)`;
-    document.querySelector('.hour-hand').style.transform = `rotate(${hourDeg}deg)`;
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
-
-  // Cook knob
-  function activateBurners() {
-    document.querySelectorAll('.burner-ring').forEach(b => b.classList.add('active'));
-    setTimeout(() => {
-      document.querySelectorAll('.burner-ring').forEach(b => b.classList.remove('active'));
-    }, 3000);
-  }
-  document.getElementById('cook-knob').addEventListener('click', activateBurners);
+  // ── Stove knob — Cook Something ──
+  let burnerOn = false;
+  document.getElementById('cookKnob').addEventListener('click', function () {
+    burnerOn = !burnerOn;
+    ['b1', 'b2', 'b3', 'b4'].forEach(id => {
+      document.getElementById(id).classList.toggle('active', burnerOn);
+    });
+    if (burnerOn) {
+      openCookModal();
+    } else {
+      closeModal();
+    }
+  });
 </script>
-
 </body>
 </html>
