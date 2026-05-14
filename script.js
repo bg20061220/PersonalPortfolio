@@ -162,44 +162,25 @@ const kitchen = document.getElementById('kitchen');
   ];
 
   const sectionContent = {
-    experience: {
-      title: '💼 Experience',
-      html: `
-        <div class="modal-section">
-          <h3>University of Waterloo</h3>
-          <p>Pursuing degree in Computer Science & Mathematics</p>
-          <p>GPA: 3.8/4.0</p>
-        </div>
-        <div class="modal-divider"></div>
-        <div class="modal-section">
-          <h3>Achievements</h3>
-          <ul>
-            <li>National Math Scholarship recipient</li>
-            <li>Published open-source package at 19</li>
-            <li>Strong foundation in algorithms & theory</li>
-          </ul>
-        </div>
-      `
-    },
+      experience: {
+  title: '💼 Experience',
+  type: 'carousel',
+  items: [
+    "Built an end-to-end Python data pipeline that auto-classifies Google Forms data into typed pandas DataFrames, integrates NLP-based topic modeling and sentiment analysis with statistical methods, and ships a Streamlit UI for interactive review, reducing manual survey analysis time by over 80%." , 
+    "Worked in a small team to clean and analyze a 1,445-record used-car dataset, built and deployed a price prediction model using Streamlit with engineered features like mileage and ownership, and created dashboards and reports to communicate key market pricing insights.",
+    "Contributed to end-to-end UX and product discovery for a real-time ER wait-time app in Figma, conducting stakeholder interviews with hospital staff to define requirements and prioritize features, and translating user research into iterative design decisions aligned with clinical workflows.",
+    "Will be working as a Product lead on UW Cube working on their website from taking it from 0 to deployed and integrating a chatbot with in as well. "
+  ]
+},
     projects: {
-      title: '🚀 Projects',
-      html: `
-        <div class="modal-section">
-          <h3>PyPI Package</h3>
-          <p>Published Python package at age 19 with 1000+ downloads. Focused on data processing automation.</p>
-        </div>
-        <div class="modal-divider"></div>
-        <div class="modal-section">
-          <h3>Mathematical Research</h3>
-          <p>Projects in combinatorics, algorithms, and computational mathematics during university.</p>
-        </div>
-        <div class="modal-divider"></div>
-        <div class="modal-section">
-          <h3>This Portfolio</h3>
-          <p>Interactive kitchen-themed portfolio with 3D CSS animations and vanilla JavaScript.</p>
-        </div>
-      `
-    },
+  title: '🚀 Projects',
+  type: 'carousel',
+  items: [
+    "📦 PyPI Package — data processing automation tool (1000+ downloads)",
+    "🧮 Mathematical Algorithms — combinatorics + computational math work",
+    "🍳 This Portfolio — interactive 3D kitchen experience built with vanilla JS"
+  ]
+},
     skills: {
       title: '⚙️ Skills',
       html: `
@@ -256,7 +237,13 @@ const kitchen = document.getElementById('kitchen');
     if (!content) return;
 
     modalTitle.textContent = content.title;
-    modalContent.innerHTML = content.html;
+    modalContent.innerHTML = "";
+
+if (content.type === "carousel") {
+  setupCarousel(content.items);
+} else {
+  modalContent.innerHTML = content.html;
+}
     modalOverlay.classList.add('active');
   }
 
@@ -437,3 +424,54 @@ const kitchen = document.getElementById('kitchen');
       closeModal();
     }
   });
+
+
+// JS for carousel of the modals.
+
+let currentIndex = 0;
+let carouselItems = [];
+
+function setupCarousel(items) {
+  carouselItems = items;
+  currentIndex = 0;
+
+  const modalContent = document.getElementById("modalContent");
+
+  modalContent.innerHTML = `
+    <div class="carousel">
+      <button class="carousel-btn left" id="carouselLeft">‹</button>
+
+      <div class="carousel-track" id="carouselTrack">
+        ${items
+          .map(
+            (item, i) => `
+              <div class="carousel-item ${i === 0 ? "active" : ""}">
+                ${item}
+              </div>
+            `
+          )
+          .join("")}
+      </div>
+
+      <button class="carousel-btn right" id="carouselRight">›</button>
+    </div>
+  `;
+
+  document.getElementById("carouselLeft").onclick = () => {
+    changeSlide(-1);
+  };
+
+  document.getElementById("carouselRight").onclick = () => {
+    changeSlide(1);
+  };
+}
+function changeSlide(direction) {
+  const items = document.querySelectorAll(".carousel-item");
+
+  items[currentIndex].classList.remove("active");
+
+  currentIndex =
+    (currentIndex + direction + items.length) % items.length;
+
+  items[currentIndex].classList.add("active");
+}
