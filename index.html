@@ -3,412 +3,43 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>Bhavya — The Kitchen</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Courier+Prime:wght@400;700&display=swap" rel="stylesheet" />
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      background: #2a1a08;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      font-family: 'Courier Prime', monospace;
-    }
+  <!-- Google Fonts -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Courier+Prime:wght@400;700&display=swap"
+    rel="stylesheet"
+  />
 
-    /* ─── KITCHEN SCENE ─── */
-    .kitchen {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* ─── WOOD PLANK WALL ─── */
-    .wood-bg { position: absolute; inset: 0; background: #5c3d1e; }
-    .plank {
-      position: absolute; top: 0; bottom: 0;
-      border-right: 1px solid rgba(0,0,0,0.18);
-      border-left: 1px solid rgba(255,255,255,0.04);
-    }
-
-    /* ─── FAIRY LIGHTS ─── */
-    .fairy-string {
-      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-      pointer-events: none;
-    }
-    .bulb {
-      position: absolute;
-      width: 9px; height: 13px;
-      border-radius: 50% 50% 45% 45%;
-      box-shadow: 0 0 6px 3px var(--glow);
-      animation: flicker var(--dur) ease-in-out infinite alternate;
-      animation-delay: var(--delay);
-      pointer-events: none;
-    }
-    .bulb::before {
-      content: '';
-      position: absolute; top: -4px; left: 2px;
-      width: 4px; height: 5px;
-      background: #777; border-radius: 1px;
-    }
-    @keyframes flicker {
-      0%   { opacity: 1; }
-      80%  { opacity: 1; }
-      83%  { opacity: 0.3; }
-      86%  { opacity: 1; }
-      92%  { opacity: 0.6; }
-      100% { opacity: 0.9; }
-    }
-
-    /* ─── WARM LIGHT OVERLAY ─── */
-    .warm-overlay {
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 50% 20%, rgba(255,180,80,0.07) 0%, transparent 65%);
-      pointer-events: none;
-    }
-
-    /* ─── FLOOR ─── */
-    .floor {
-      position: absolute; bottom: 0; left: 0; right: 0; height: 80px;
-      background: repeating-linear-gradient(
-        90deg,
-        #3a2510 0px, #3a2510 48px,
-        #2e1d0c 48px, #2e1d0c 50px
-      );
-      border-top: 2px solid #2a1a08;
-    }
-
-    /* ─── APPLIANCES CONTAINER ─── */
-    .appliances {
-      position: absolute;
-      bottom: 80px;
-      left: 50%; transform: translateX(-50%);
-      display: flex;
-      gap: 80px;
-      align-items: flex-end;
-    }
-
-    /* ══════════════════════════════
-       FRIDGE
-    ══════════════════════════════ */
-    .fridge-wrap { position: relative; width: 180px; height: 360px; }
-
-    .fridge-body {
-      position: absolute; inset: 0;
-      background: linear-gradient(to right, #c0a880 0%, #ddc8a8 12%, #ece0cc 50%, #ddc8a8 88%, #b09870 100%);
-      border-radius: 10px;
-      box-shadow: 5px 8px 24px rgba(0,0,0,0.5);
-    }
-    .f-top-face {
-      position: absolute; top: -7px; left: 3px; right: -8px; height: 8px;
-      background: #b09870; border-radius: 3px 3px 0 0;
-      transform: skewX(-45deg) scaleX(0.97); transform-origin: bottom left;
-    }
-    .f-side-face {
-      position: absolute; top: -2px; right: -9px; width: 10px; bottom: 8px;
-      background: #a08860; border-radius: 0 3px 3px 0;
-      transform: skewY(-45deg); transform-origin: top left;
-    }
-
-    /* Freezer interior (behind freezer door) */
-    .f-freezer-interior {
-      position: absolute; top: 5px; left: 5px; right: 5px; height: 85px;
-      background: #c8e8e8;
-      border-radius: 6px 6px 0 0;
-      display: flex; align-items: center; justify-content: center;
-      gap: 6px; padding: 8px 6px; overflow: hidden;
-      z-index: 1;
-    }
-    .sticky {
-      width: 50px; height: 50px; border-radius: 2px; padding: 4px;
-      font-size: 7px; line-height: 1.3; color: #333;
-      display: flex; align-items: center; justify-content: center;
-      text-align: center;
-      box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
-      flex-shrink: 0;
-      font-family: 'Courier Prime', monospace;
-    }
-
-    /* Freezer door */
-    .f-freezer-door-wrap {
-      position: absolute; top: 5px; left: 5px; right: 5px; height: 85px;
-      perspective: 700px; perspective-origin: right center;
-      z-index: 2;
-    }
-    .f-freezer-door {
-      position: absolute; inset: 0;
-      transform-origin: right center; transform: rotateY(0deg);
-      transition: transform 0.55s ease-in-out;
-      cursor: pointer; transform-style: preserve-3d;
-    }
-    .f-freezer-door.open { transform: rotateY(-115deg); }
-    .f-freezer-door-face {
-      position: absolute; inset: 0;
-      background: linear-gradient(to right, #b8a888, #d0c0a0, #ddd0b8, #d0c0a0, #a89878);
-      border-radius: 6px 6px 0 0; backface-visibility: visible;
-    }
-    .f-freezer-gasket {
-      position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
-      border: 1.5px solid rgba(100,80,40,0.2); border-radius: 3px; pointer-events: none;
-    }
-    .f-freezer-handle {
-      position: absolute; top: 50%; transform: translateY(-50%); left: 10px;
-      width: 8px; height: 30px; border-radius: 4px;
-      background: linear-gradient(to right, rgba(180,160,120,0.6), rgba(255,245,220,0.9), rgba(180,160,120,0.6));
-    }
-    .f-freezer-handle::after {
-      content: ''; position: absolute; top: 3px; left: 2px; width: 2px; height: 24px;
-      background: rgba(255,255,255,0.5); border-radius: 1px;
-    }
-    .f-freezer-door-back {
-      position: absolute; inset: 0; background: #c8b890;
-      border-radius: 6px 6px 0 0; transform: rotateY(180deg); backface-visibility: visible;
-    }
-
-    /* Divider between freezer and main door */
-    .f-divider {
-      position: absolute; top: 89px; left: 5px; right: 5px; height: 3px;
-      background: #a08860; z-index: 3;
-    }
-
-    /* Main interior (behind main door) */
-    .f-interior {
-      position: absolute; top: 92px; left: 5px; right: 5px; bottom: 5px;
-      background: linear-gradient(to bottom, #f0f8f0 0%, #d8ede8 50%, #c8e4e0 100%);
-      border-radius: 0 0 7px 7px;
-      display: flex; flex-direction: column;
-      padding: 8px 6px 6px;
-      z-index: 1;
-    }
-    .f-shelf {
-      flex: 1; display: flex; align-items: center; justify-content: center;
-      border-bottom: 1px solid rgba(255,255,255,0.5);
-      font-size: 13px; font-weight: 700; letter-spacing: 0.5px;
-      color: #3a6050;
-      cursor: pointer;
-      transition: background 0.15s;
-      position: relative;
-      z-index: 10;
-      font-family: 'Playfair Display', serif;
-    }
-    .f-shelf:hover { background: rgba(255,255,255,0.25); }
-    .f-shelf:last-child { border-bottom: none; }
-
-    /* Main door */
-    .f-door-wrap {
-      position: absolute; top: 92px; left: 5px; right: 5px; bottom: 5px;
-      perspective: 900px; perspective-origin: right center;
-      z-index: 2;
-    }
-    .f-door {
-      position: absolute; inset: 0;
-      transform-origin: right center; transform: rotateY(0deg);
-      transition: transform 0.65s ease-in-out;
-      cursor: pointer; transform-style: preserve-3d;
-    }
-    .f-door.open { transform: rotateY(-125deg); }
-    .f-door-wrap {
-      pointer-events: auto;
-    }
-    .f-door-face {
-      position: absolute; inset: 0;
-      background: linear-gradient(to right, #c0a880 0%, #ddc8a8 12%, #ece0cc 50%, #ddc8a8 88%, #b8a888 100%);
-      border-radius: 0 0 7px 7px; backface-visibility: visible;
-    }
-    .f-gasket {
-      position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px;
-      border: 1.5px solid rgba(100,80,40,0.2); border-radius: 3px; pointer-events: none;
-    }
-    .f-handle {
-      position: absolute; top: 50%; transform: translateY(-50%); left: 12px;
-      width: 8px; height: 65px; border-radius: 5px;
-      background: linear-gradient(to right, rgba(180,160,120,0.6), rgba(255,245,220,0.9), rgba(180,160,120,0.6));
-    }
-    .f-handle::after {
-      content: ''; position: absolute; top: 4px; left: 2px; width: 2px; height: 57px;
-      background: rgba(255,255,255,0.5); border-radius: 1px;
-    }
-    .f-nameplate {
-      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-      background: rgba(120,90,40,0.5); padding: 3px 12px; border-radius: 3px;
-      color: #f0e0c0; font-family: 'Playfair Display', serif;
-      font-size: 11px; letter-spacing: 1px; white-space: nowrap;
-    }
-    .f-door-back {
-      position: absolute; inset: 0; background: #c8b890;
-      border-radius: 0 0 7px 7px; transform: rotateY(180deg); backface-visibility: visible;
-    }
-
-    .f-vent {
-      position: absolute; bottom: 9px; left: 16px; right: 16px; height: 6px;
-      background: #a08860; border-radius: 2px; z-index: 3;
-      display: flex; gap: 5px; align-items: center; padding: 0 6px; overflow: hidden;
-    }
-    .f-vent-slot { flex: 1; height: 2px; background: #886840; border-radius: 1px; }
-
-    /* ══════════════════════════════
-       STOVE / COOKTOP
-    ══════════════════════════════ */
-    .stove-wrap { position: relative; width: 220px; height: 290px; }
-    .stove-body {
-      position: absolute; inset: 0;
-      background: #1e1e1e; border-radius: 10px;
-      box-shadow: 5px 8px 24px rgba(0,0,0,0.6);
-    }
-    .stove-hood {
-      position: absolute; top: 0; left: 0; right: 0; height: 24px;
-      background: #2a2a2a; border-radius: 10px 10px 0 0;
-      border-bottom: 2px solid #444;
-    }
-    .stove-hood::after {
-      content: '';
-      position: absolute; bottom: 0; left: 20px; right: 20px; height: 1px;
-      background: rgba(255,255,255,0.08);
-    }
-    .burners {
-      position: absolute; top: 32px; left: 0; right: 0;
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 16px; padding: 16px;
-    }
-    .burner {
-      width: 66px; height: 66px; border-radius: 50%;
-      background: radial-gradient(circle, #2a2a2a 30%, #1a1a1a 70%, #111 100%);
-      border: 3px solid #333;
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
-      justify-self: center;
-      transition: box-shadow 0.3s, background 0.3s;
-    }
-    .burner.active {
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5),
-                  0 0 12px 4px rgba(255,100,20,0.7),
-                  0 0 28px 10px rgba(255,60,0,0.3);
-      background: radial-gradient(circle, #ff6b20 0%, #cc3300 40%, #1a1a1a 70%);
-    }
-    .knob-area {
-      position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-      display: flex; flex-direction: column; align-items: center; gap: 5px;
-      cursor: pointer;
-    }
-    .knob {
-      width: 30px; height: 30px; border-radius: 50%;
-      background: radial-gradient(circle at 40% 35%, #555, #222);
-      border: 2px solid #444;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
-      display: flex; align-items: center; justify-content: center;
-      transition: transform 0.2s;
-    }
-    .knob:hover { transform: rotate(30deg); }
-    .knob-line { width: 2px; height: 9px; background: #888; border-radius: 1px; }
-    .cook-label {
-      font-size: 8px; letter-spacing: 1.5px;
-      color: #C4572A; text-transform: uppercase;
-      font-family: 'Courier Prime', monospace;
-    }
-    .pilot {
-      width: 5px; height: 5px; border-radius: 50%;
-      background: #ff4400;
-      box-shadow: 0 0 4px 2px rgba(255,80,0,0.6);
-    }
-
-    /* ══════════════════════════════
-       MODALS
-    ══════════════════════════════ */
-    .modal-overlay {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6); backdrop-filter: blur(4px);
-      z-index: 1000;
-      opacity: 0; transition: opacity 0.3s ease;
-    }
-    .modal-overlay.active {
-      display: flex;
-      align-items: center; justify-content: center;
-      opacity: 1;
-    }
-
-    .modal {
-      background: linear-gradient(135deg, #ece0cc 0%, #ddc8a8 50%, #c0a880 100%);
-      border-radius: 12px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
-      padding: 0;
-      max-width: 500px;
-      width: 90%;
-      max-height: 80vh;
-      overflow-y: auto;
-      transform: scale(0.8);
-      transition: transform 0.3s ease;
-      border: 3px solid #a08860;
-      color: #2a1a08;
-      font-family: 'Courier Prime', monospace;
-    }
-    .modal-overlay.active .modal {
-      transform: scale(1);
-    }
-
-    .modal-header {
-      background: linear-gradient(to right, #a08860, #b89870, #a08860);
-      padding: 20px;
-      border-bottom: 2px solid #886840;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .modal-title {
-      font-size: 20px; font-weight: bold;
-      font-family: 'Playfair Display', serif;
-      letter-spacing: 1px;
-    }
-    .modal-close {
-      background: none; border: none;
-      font-size: 24px; cursor: pointer;
-      color: #2a1a08; transition: transform 0.2s;
-    }
-    .modal-close:hover { transform: rotate(90deg); }
-
-    .modal-content {
-      padding: 24px;
-      line-height: 1.6;
-      font-size: 14px;
-    }
-    .modal-section {
-      margin-bottom: 20px;
-    }
-    .modal-section:last-child {
-      margin-bottom: 0;
-    }
-    .modal-section h3 {
-      font-family: 'Playfair Display', serif;
-      font-size: 16px;
-      margin-bottom: 8px;
-      color: #5c3d1e;
-      text-decoration: underline;
-    }
-    .modal-section ul {
-      margin-left: 20px;
-    }
-    .modal-section li {
-      margin-bottom: 8px;
-    }
-
-    .modal-divider {
-      height: 1px;
-      background: rgba(100,80,40,0.3);
-      margin: 16px 0;
-    }
-  </style>
+  <!-- External CSS -->
+  <link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
 
 <div class="kitchen" id="kitchen">
+
+  <!-- Background -->
   <div class="wood-bg" id="woodBg"></div>
   <div class="warm-overlay"></div>
-  <svg class="fairy-string" id="fairySvg" xmlns="http://www.w3.org/2000/svg"></svg>
+
+  <!-- Fairy Lights -->
+  <svg
+    class="fairy-string"
+    id="fairySvg"
+    xmlns="http://www.w3.org/2000/svg"
+  ></svg>
+
   <div id="bulbContainer"></div>
+
+  <!-- Floor -->
   <div class="floor"></div>
 
-  <svg
+  <!-- SIGN -->
+  <!-- PASTE YOUR ENTIRE SVG SIGN HERE -->
+  <!-- Keep the exact SVG from your original file -->
+<svg
     position="absolute"
     style="position: absolute; top: 20px; left: 50%; transform: translateX(-50%); width: 286px; z-index: 10;"
     viewBox="0 0 680 460"
@@ -515,536 +146,190 @@
       <text transform="translate(427,327) rotate(-42)" text-anchor="middle">L</text>
     </g>
   </svg>
-
   <div class="appliances">
 
-    <!-- ── FRIDGE ── -->
+    <!-- ─────────────────────────────
+         FRIDGE
+    ───────────────────────────── -->
     <div class="fridge-wrap">
+
       <div class="fridge-body"></div>
       <div class="f-top-face"></div>
       <div class="f-side-face"></div>
 
-      <!-- Freezer interior -->
+      <!-- Freezer Interior -->
       <div class="f-freezer-interior">
-        <div class="sticky" style="background:#fff9c4;transform:rotate(-2deg);">National Math Scholarship 🏅</div>
-        <div class="sticky" style="background:#c8e6c9;transform:rotate(2deg);">Waterloo CS + Math</div>
-        <div class="sticky" style="background:#ffe0b2;transform:rotate(-1deg);">PyPI package at 19</div>
+
+        <div
+          class="sticky"
+          style="background:#fff9c4;transform:rotate(-2deg);"
+        >
+          National Math Scholarship 🏅
+        </div>
+
+        <div
+          class="sticky"
+          style="background:#c8e6c9;transform:rotate(2deg);"
+        >
+          Waterloo CS + Math
+        </div>
+
+        <div
+          class="sticky"
+          style="background:#ffe0b2;transform:rotate(-1deg);"
+        >
+          PyPI package at 19
+        </div>
+
       </div>
 
-      <!-- Freezer door -->
+      <!-- Freezer Door -->
       <div class="f-freezer-door-wrap">
+
         <div class="f-freezer-door" id="freezerDoor">
+
           <div class="f-freezer-door-face">
             <div class="f-freezer-gasket"></div>
             <div class="f-freezer-handle"></div>
           </div>
+
           <div class="f-freezer-door-back"></div>
+
         </div>
+
       </div>
 
       <div class="f-divider"></div>
 
-      <!-- Main interior -->
+      <!-- Main Interior -->
       <div class="f-interior">
-        <div class="f-shelf" data-section="experience">Experience</div>
-        <div class="f-shelf" data-section="projects">Projects</div>
-        <div class="f-shelf" data-section="skills">Skills</div>
-        <div class="f-shelf" data-section="about">About</div>
-      </div>
 
-      <!-- Main door -->
-      <div class="f-door-wrap">
-        <div class="f-door" id="fridgeDoor">
-          <div class="f-door-face">
-            <div class="f-gasket"></div>
-            <div class="f-handle"></div>
-            <div class="f-nameplate">Bhavya</div>
-          </div>
-          <div class="f-door-back"></div>
+        <div class="f-shelf" data-section="experience">
+          Experience
         </div>
+
+        <div class="f-shelf" data-section="projects">
+          Projects
+        </div>
+
+        <div class="f-shelf" data-section="skills">
+          Skills
+        </div>
+
+        <div class="f-shelf" data-section="about">
+          About
+        </div>
+
       </div>
 
-      <div class="f-vent">
-        <div class="f-vent-slot"></div><div class="f-vent-slot"></div>
-        <div class="f-vent-slot"></div><div class="f-vent-slot"></div>
-        <div class="f-vent-slot"></div><div class="f-vent-slot"></div>
+      <!-- Main Door -->
+      <div class="f-door-wrap">
+
+        <div class="f-door" id="fridgeDoor">
+
+          <div class="f-door-face">
+
+            <div class="f-gasket"></div>
+
+            <div class="f-handle"></div>
+
+            <div class="f-nameplate">
+              Bhavya
+            </div>
+
+          </div>
+
+          <div class="f-door-back"></div>
+
+        </div>
+
       </div>
+
+      <!-- Bottom Vent -->
+      <div class="f-vent">
+
+        <div class="f-vent-slot"></div>
+        <div class="f-vent-slot"></div>
+        <div class="f-vent-slot"></div>
+        <div class="f-vent-slot"></div>
+        <div class="f-vent-slot"></div>
+        <div class="f-vent-slot"></div>
+
+      </div>
+
     </div>
 
-    <!-- ── STOVE ── -->
+    <!-- ─────────────────────────────
+         STOVE
+    ───────────────────────────── -->
     <div class="stove-wrap">
+
       <div class="stove-body">
+
         <div class="stove-hood"></div>
+
+        <!-- Burners -->
         <div class="burners">
+
           <div class="burner" id="b1"></div>
           <div class="burner" id="b2"></div>
           <div class="burner" id="b3"></div>
           <div class="burner" id="b4"></div>
+
         </div>
+
+        <!-- Knob -->
         <div class="knob-area" id="cookKnob">
-          <div class="knob"><div class="knob-line"></div></div>
-          <div class="cook-label">Cook Something</div>
+
+          <div class="knob">
+            <div class="knob-line"></div>
+          </div>
+
+          <div class="cook-label">
+            Cook Something
+          </div>
+
           <div class="pilot"></div>
+
         </div>
+
       </div>
+
     </div>
 
   </div>
 
-  <!-- Modal Overlay -->
+  <!-- ─────────────────────────────
+       MODAL
+  ───────────────────────────── -->
   <div class="modal-overlay" id="modalOverlay">
+
     <div class="modal" id="modal">
+
       <div class="modal-header">
-        <div class="modal-title" id="modalTitle">Title</div>
-        <button class="modal-close" id="modalClose">&times;</button>
+
+        <div class="modal-title" id="modalTitle">
+          Title
+        </div>
+
+        <button class="modal-close" id="modalClose">
+          &times;
+        </button>
+
       </div>
+
       <div class="modal-content" id="modalContent">
-        <!-- Content gets injected here -->
+        <!-- Injected dynamically -->
       </div>
+
     </div>
+
   </div>
+
 </div>
 
-<script>
-  const kitchen = document.getElementById('kitchen');
-  const W = window.innerWidth;
-  const H = window.innerHeight;
+<!-- External JavaScript -->
+<script src="script.js"></script>
 
-  // ── Wood planks ──
-  const woodBg = document.getElementById('woodBg');
-  const plankColors = ['#5c3d1e','#4e3318','#634425','#573d20','#4a3015','#5a3b1c','#623f22','#503819'];
-  let px = 0, pi = 0;
-  while (px < W + 60) {
-    const w = 38 + Math.floor(Math.random() * 22);
-    const d = document.createElement('div');
-    d.className = 'plank';
-    d.style.cssText = `left:${px}px;width:${w}px;background:${plankColors[pi % plankColors.length]};`;
-    woodBg.appendChild(d);
-    px += w + 1; pi++;
-  }
-
-  // ── Fairy lights ──
-  const svg = document.getElementById('fairySvg');
-  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-  svg.setAttribute('width', W);
-  svg.setAttribute('height', H);
-  const bulbContainer = document.getElementById('bulbContainer');
-
-  const bulbColors = [
-    {bg:'#ffdd88',glow:'rgba(255,210,80,0.85)'},
-    {bg:'#ffaa55',glow:'rgba(255,140,50,0.85)'},
-    {bg:'#ff8844',glow:'rgba(255,100,40,0.8)'},
-    {bg:'#ffcc66',glow:'rgba(255,190,60,0.85)'},
-    {bg:'#ff9966',glow:'rgba(255,130,60,0.8)'},
-    {bg:'#ffe066',glow:'rgba(255,200,50,0.85)'},
-  ];
-
-  // safe zone — no lights behind appliances
-  const appW = 180 + 80 + 220;
-  const appLeft = (W - appW) / 2;
-  const appRight = appLeft + appW;
-  const appTop = H - 80 - 360;
-  function isBehind(x, y) {
-    return x > appLeft - 20 && x < appRight + 20 && y > appTop - 10;
-  }
-
-  // string 1: top edge with gentle sag
-  const s1 = [];
-  for (let i = 0; i <= 12; i++) {
-    const t = i / 12;
-    const x = 20 + t * (W - 40);
-    const lt = (t * 12) % 1;
-    const sag = Math.sin(lt * Math.PI) * (14 + Math.random() * 10);
-    s1.push({ x, y: 10 + Math.random() * 16 + sag });
-  }
-
-  // string 2: left side zigzag
-  const s2 = [];
-  let sy2 = 20;
-  while (sy2 < H - 90) {
-    s2.push({ x: 14 + Math.random() * 55, y: sy2 });
-    sy2 += 42 + Math.random() * 32;
-  }
-
-  // string 3: right side zigzag
-  const s3 = [];
-  let sy3 = 25;
-  while (sy3 < H - 90) {
-    s3.push({ x: W - 14 - Math.random() * 55, y: sy3 });
-    sy3 += 42 + Math.random() * 32;
-  }
-
-  // string 4: bottom edge
-  const s4 = [];
-  for (let i = 0; i <= 8; i++) {
-    const t = i / 8;
-    const x = 20 + t * (W - 40);
-    const lt = (t * 8) % 1;
-    const sag = Math.sin(lt * Math.PI) * 8;
-    s4.push({ x, y: H - 14 - Math.random() * 10 - sag });
-  }
-
-  // string 5: top-left diagonal staying clear of appliances
-  const s5 = [
-    { x: 25, y: 40 + Math.random() * 20 },
-    { x: 80 + Math.random() * 40, y: 80 + Math.random() * 30 },
-    { x: 150 + Math.random() * 30, y: 45 + Math.random() * 25 },
-    { x: appLeft - 30, y: 90 + Math.random() * 30 },
-  ];
-
-  // string 6: top-right diagonal staying clear of appliances
-  const s6 = [
-    { x: W - 25, y: 45 + Math.random() * 20 },
-    { x: W - 80 - Math.random() * 40, y: 85 + Math.random() * 30 },
-    { x: W - 150 - Math.random() * 30, y: 50 + Math.random() * 25 },
-    { x: appRight + 30, y: 95 + Math.random() * 30 },
-  ];
-
-  [s1, s2, s3, s4, s5, s6].forEach((pts, si) => {
-    const safe = pts.filter(p => !isBehind(p.x, p.y));
-    if (safe.length < 2) return;
-
-    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    path.setAttribute('d', safe.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' '));
-    path.setAttribute('stroke', 'rgba(90,65,40,0.5)');
-    path.setAttribute('stroke-width', '1.2');
-    path.setAttribute('fill', 'none');
-    svg.appendChild(path);
-
-    safe.forEach((p, i) => {
-      const c = bulbColors[(si * 4 + i) % bulbColors.length];
-      const el = document.createElement('div');
-      el.className = 'bulb';
-      el.style.cssText = `
-        left:${(p.x - 4).toFixed(1)}px;
-        top:${(p.y - 6).toFixed(1)}px;
-        background:${c.bg};
-        --glow:${c.glow};
-        --dur:${(1.8 + Math.random() * 3).toFixed(1)}s;
-        --delay:${(Math.random() * 5).toFixed(2)}s;
-      `;
-      bulbContainer.appendChild(el);
-    });
-  });
-
-  // ── Fridge door toggles ──
-  document.querySelector('.f-door-wrap').addEventListener('click', function(e) {
-    const door = document.getElementById('fridgeDoor');
-    const shelf = e.target.closest('.f-shelf');
-
-    if (shelf) {
-      // shelf click — open modal, don't touch door
-      onShelfClick(shelf.dataset.section);
-      return;
-    }
-
-    if (!door.classList.contains('open')) {
-      door.classList.add('open');
-      this.style.zIndex = '0'; // drop below interior so shelves get clicks
-    } else {
-      door.classList.remove('open');
-      this.style.zIndex = '2'; // restore so door is clickable again
-    }
-  });
-  document.getElementById('freezerDoor').addEventListener('click', function () {
-    this.classList.toggle('open');
-  });
-
-  // ── Modal System ──
-  const modalOverlay = document.getElementById('modalOverlay');
-  const modal = document.getElementById('modal');
-  const modalTitle = document.getElementById('modalTitle');
-  const modalContent = document.getElementById('modalContent');
-  const modalClose = document.getElementById('modalClose');
-
-  const experiences = [
-    { name: 'University of Waterloo', desc: 'CS + Math degree, GPA 3.8/4.0' },
-    { name: 'National Math Scholarship', desc: 'Awarded for exceptional mathematical aptitude' },
-    { name: 'PyPI Package Creator', desc: 'Published package at age 19' }
-  ];
-
-  const projects = [
-    { name: 'PyPI Package', desc: 'Data processing automation tool' },
-    { name: 'Mathematical Algorithms', desc: 'Combinatorics & computational math' },
-    { name: 'This Portfolio', desc: 'Interactive 3D kitchen experience' }
-  ];
-
-  const sectionContent = {
-    experience: {
-      title: '💼 Experience',
-      html: `
-        <div class="modal-section">
-          <h3>University of Waterloo</h3>
-          <p>Pursuing degree in Computer Science & Mathematics</p>
-          <p>GPA: 3.8/4.0</p>
-        </div>
-        <div class="modal-divider"></div>
-        <div class="modal-section">
-          <h3>Achievements</h3>
-          <ul>
-            <li>National Math Scholarship recipient</li>
-            <li>Published open-source package at 19</li>
-            <li>Strong foundation in algorithms & theory</li>
-          </ul>
-        </div>
-      `
-    },
-    projects: {
-      title: '🚀 Projects',
-      html: `
-        <div class="modal-section">
-          <h3>PyPI Package</h3>
-          <p>Published Python package at age 19 with 1000+ downloads. Focused on data processing automation.</p>
-        </div>
-        <div class="modal-divider"></div>
-        <div class="modal-section">
-          <h3>Mathematical Research</h3>
-          <p>Projects in combinatorics, algorithms, and computational mathematics during university.</p>
-        </div>
-        <div class="modal-divider"></div>
-        <div class="modal-section">
-          <h3>This Portfolio</h3>
-          <p>Interactive kitchen-themed portfolio with 3D CSS animations and vanilla JavaScript.</p>
-        </div>
-      `
-    },
-    skills: {
-      title: '⚙️ Skills',
-      html: `
-        <div class="modal-section">
-          <h3>Languages</h3>
-          <p>Python • JavaScript • Java • C++ • SQL • HTML/CSS</p>
-        </div>
-        <div class="modal-divider"></div>
-        <div class="modal-section">
-          <h3>Frameworks & Tools</h3>
-          <p>React • Node.js • TensorFlow • Pandas • Git • Docker</p>
-        </div>
-        <div class="modal-divider"></div>
-        <div class="modal-section">
-          <h3>Specialties</h3>
-          <ul>
-            <li>Machine Learning & AI</li>
-            <li>Web Development</li>
-            <li>Data Analysis</li>
-            <li>Algorithm Design</li>
-          </ul>
-        </div>
-      `
-    },
-    about: {
-      title: '👋 About Me',
-      html: `
-        <div class="modal-section">
-          <p>Hi! I'm Bhavya, a Computer Science and Mathematics student at the University of Waterloo.</p>
-        </div>
-        <div class="modal-divider"></div>
-        <div class="modal-section">
-          <h3>Highlights</h3>
-          <ul>
-            <li>National Math Scholarship recipient</li>
-            <li>Published open-source package at 19</li>
-            <li>Passionate about AI & machine learning</li>
-            <li>Love creative problem-solving</li>
-          </ul>
-        </div>
-        <div class="modal-divider"></div>
-        <div class="modal-section">
-          <p>When I'm not coding, you'll find me exploring new technologies or working on personal projects.</p>
-        </div>
-      `
-    }
-  };
-
-  let selectedExperience = null;
-  let selectedProject = null;
-
-  function openModal(section) {
-    const content = sectionContent[section];
-    if (!content) return;
-
-    modalTitle.textContent = content.title;
-    modalContent.innerHTML = content.html;
-    modalOverlay.classList.add('active');
-  }
-
-  function openCookModal() {
-    selectedExperience = null;
-    selectedProject = null;
-
-    modalTitle.textContent = '👨‍🍳 Cook Something — inspired by cmh live counter';
-    modalContent.innerHTML = `
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start;">
-        <div>
-          <h3 style="font-family: 'Playfair Display', serif; font-size: 14px; margin-bottom: 12px; color: #5c3d1e; text-decoration: underline;">Choose Your Base <span style="font-size: 12px; color: #886840;">(max 1)</span></h3>
-          <div style="display: flex; flex-direction: column; gap: 6px;">
-            ${experiences.map((exp, i) => `
-              <button style="
-                padding: 8px;
-                background: ${selectedExperience === i ? '#a08860' : '#d4c5a8'};
-                border: 2px solid #886840;
-                border-radius: 6px;
-                cursor: pointer;
-                font-family: 'Courier Prime', monospace;
-                font-size: 12px;
-                text-align: left;
-                transition: all 0.2s;
-                color: #2a1a08;
-              " class="exp-btn" data-idx="${i}">
-                <strong>${exp.name}</strong><br>
-                <small style="opacity: 0.7;">${exp.desc}</small>
-              </button>
-            `).join('')}
-          </div>
-        </div>
-        <div>
-          <h3 style="font-family: 'Playfair Display', serif; font-size: 14px; margin-bottom: 12px; color: #5c3d1e; text-decoration: underline;">Choose Your Toppings <span style="font-size: 12px; color: #886840;">(max 3)</span></h3>
-          <div style="display: flex; flex-direction: column; gap: 6px;">
-            ${projects.map((proj, i) => `
-              <button style="
-                padding: 8px;
-                background: ${selectedProject === i ? '#a08860' : '#d4c5a8'};
-                border: 2px solid #886840;
-                border-radius: 6px;
-                cursor: pointer;
-                font-family: 'Courier Prime', monospace;
-                font-size: 12px;
-                text-align: left;
-                transition: all 0.2s;
-                color: #2a1a08;
-              " class="proj-btn" data-idx="${i}">
-                <strong>${proj.name}</strong><br>
-                <small style="opacity: 0.7;">${proj.desc}</small>
-              </button>
-            `).join('')}
-          </div>
-        </div>
-      </div>
-      <div style="margin-top: 16px;">
-        <button id="cookSummaryBtn" style="
-          width: 100%;
-          padding: 12px;
-          background: ${selectedExperience !== null && selectedProject !== null ? '#a08860' : '#ccc'};
-          border: 2px solid #886840;
-          border-radius: 6px;
-          cursor: ${selectedExperience !== null && selectedProject !== null ? 'pointer' : 'not-allowed'};
-          font-family: 'Playfair Display', serif;
-          font-size: 14px;
-          font-weight: bold;
-          transition: all 0.2s;
-          color: #2a1a08;
-        " ${selectedExperience === null || selectedProject === null ? 'disabled' : ''}>
-          Let's Cook
-        </button>
-      </div>
-    `;
-
-    // Add event listeners for experience buttons
-    document.querySelectorAll('.exp-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        selectedExperience = parseInt(this.dataset.idx);
-        openCookModal();
-      });
-    });
-
-    // Add event listeners for project buttons
-    document.querySelectorAll('.proj-btn').forEach(btn => {
-      btn.addEventListener('click', function() {
-        selectedProject = parseInt(this.dataset.idx);
-        openCookModal();
-      });
-    });
-
-    // Add listener for summary button
-    const summaryBtn = document.getElementById('cookSummaryBtn');
-    if (summaryBtn && selectedExperience !== null && selectedProject !== null) {
-      summaryBtn.addEventListener('click', showCookSummary);
-    }
-
-    modalOverlay.classList.add('active');
-  }
-
-  function showCookSummary() {
-    const exp = experiences[selectedExperience];
-    const proj = projects[selectedProject];
-
-    modalTitle.textContent = '✨ Your Recipe';
-    modalContent.innerHTML = `
-      <div class="modal-section">
-        <h3>Combining:</h3>
-        <p><strong>${exp.name}</strong></p>
-        <p style="color: #666; font-size: 12px;">${exp.desc}</p>
-      </div>
-      <div class="modal-divider"></div>
-      <div class="modal-section">
-        <p><strong>${proj.name}</strong></p>
-        <p style="color: #666; font-size: 12px;">${proj.desc}</p>
-      </div>
-      <div class="modal-divider"></div>
-      <div class="modal-section">
-        <h3>The Recipe:</h3>
-        <p>I combined my ${exp.name.toLowerCase()} with my expertise in ${proj.name.toLowerCase()} to create something meaningful. This blend of theoretical knowledge and practical application drives my approach to problem-solving and innovation.</p>
-      </div>
-      <div class="modal-section">
-        <button id="cookAgainBtn" style="
-          width: 100%;
-          padding: 10px;
-          background: #d4c5a8;
-          border: 2px solid #886840;
-          border-radius: 6px;
-          cursor: pointer;
-          font-family: 'Courier Prime', monospace;
-          font-size: 13px;
-          transition: all 0.2s;
-        ">Cook Again</button>
-      </div>
-    `;
-
-    document.getElementById('cookAgainBtn').addEventListener('click', openCookModal);
-    modalOverlay.classList.add('active');
-  }
-
-  function closeModal() {
-    modalOverlay.classList.remove('active');
-  }
-
-  // Close on background click
-  modalOverlay.addEventListener('click', e => {
-    if (e.target === modalOverlay) closeModal();
-  });
-
-  // Close button
-  modalClose.addEventListener('click', closeModal);
-
-  // Close on Escape key
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') closeModal();
-  });
-
-  // ── Shelf clicks ──
-  function onShelfClick(section) {
-    openModal(section);
-  }
-  document.querySelectorAll('.f-shelf').forEach(el => {
-    el.addEventListener('click', e => {
-      e.stopPropagation();
-      onShelfClick(el.dataset.section);
-    });
-  });
-
-  // ── Stove knob — Cook Something ──
-  let burnerOn = false;
-  document.getElementById('cookKnob').addEventListener('click', function () {
-    burnerOn = !burnerOn;
-    ['b1', 'b2', 'b3', 'b4'].forEach(id => {
-      document.getElementById(id).classList.toggle('active', burnerOn);
-    });
-    if (burnerOn) {
-      openCookModal();
-    } else {
-      closeModal();
-    }
-  });
-</script>
 </body>
 </html>
